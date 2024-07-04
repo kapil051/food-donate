@@ -12,9 +12,14 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-dropdown": "^1.11.0",
+    "react-helmet": "^6.1.0",
+    "react-loader-spinner": "^6.1.6",
+    "react-lottie": "^1.2.4",
     "react-router-dom": "^6.24.0"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
