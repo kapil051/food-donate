@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -15,8 +15,8 @@ const Header = () => {
                     <a href="/help" className="text-gray-800 hover:text-gray-600 py-2">How to help</a>
                     <a href="/get-involved" className="text-gray-800 hover:text-gray-600 py-2">Get involved</a>
                     <a href="/blogs" className="text-gray-800 hover:text-gray-600 py-2">Blogs</a>
-                    <button className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition duration-300">Donate Now</button>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition duration-300">Login</button>
+                    <Link to="/register"><button className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition duration-300">Register</button></Link>
+                    <Link to="/login"><button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition duration-300">Login</button></Link>
                 </nav>
                 <div className="md:hidden flex items-center">
                     <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 hover:text-gray-600 focus:outline-none">
@@ -40,7 +40,7 @@ const Header = () => {
                         <a href="/help" className="block text-gray-800 hover:text-gray-600 py-2">How to help</a>
                         <a href="/get-involved" className="block text-gray-800 hover:text-gray-600 py-2">Get involved</a>
                         <a href="/blogs" className="block text-gray-800 hover:text-gray-600 py-2">Blogs</a>
-                        <button className="w-full bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition duration-300">Donate Now</button>
+                        <button className="w-full bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition duration-300">Sign Up</button>
                         <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition duration-300">Login</button>
                     </nav>
                 </div>
