@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BiSolidDonateHeart } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -6,15 +7,16 @@ const Header = () => {
     return (
         <header className="bg-white shadow-b shadow-lg">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-                <div className="text-xl font-bold text-gray-900">
-                    <a href="/">Food Donation</a>
-                </div>
+            <div className="flex flex-row items-center gap-x-4 ">
+              <BiSolidDonateHeart className="text-6xl " />
+              <a className="flex-none text-xl font-semibold  font-pacifico" href="/" aria-label="Brand">Food Donation </a>
+            </div>
                 <nav className="hidden md:flex space-x-6">
-                    <a href="/about" className="text-gray-800 hover:text-gray-600 py-2">Who we are</a>
-                    <a href="/what-we-do" className="text-gray-800 hover:text-gray-600 py-2">What we do</a>
-                    <a href="/help" className="text-gray-800 hover:text-gray-600 py-2">How to help</a>
-                    <a href="/get-involved" className="text-gray-800 hover:text-gray-600 py-2">Get involved</a>
-                    <a href="/blogs" className="text-gray-800 hover:text-gray-600 py-2">Blogs</a>
+                    <a href="/availablefood" className="text-gray-800 hover:text-gray-600 py-2">Available Foods</a>
+                    <a href="/donatefood" className="text-gray-800 hover:text-gray-600 py-2">Donate Food</a>
+                    <a href="#" className="text-gray-800 hover:text-gray-600 py-2">My Food</a>
+                    <a href="#" className="text-gray-800 hover:text-gray-600 py-2">My Food Request</a>
+                    <a href="#" className="text-gray-800 hover:text-gray-600 py-2">Blogs</a>
                     <Link to="/register"><button className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition duration-300">Register</button></Link>
                     <Link to="/login"><button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition duration-300">Login</button></Link>
                 </nav>
