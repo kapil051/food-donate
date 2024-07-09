@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import donorRouter from "./routes/donor.js"
-import volunteerRouter from "./routes/volunteer.js"
+import userRouter from "./routes/user.js"
+
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 
@@ -13,39 +13,39 @@ const port = 3000;
 
 app.use(express.json());
 app.use(cors());
-app.use("/donor", donorRouter);
-app.use("/volunteer", volunteerRouter);
+app.use("/user", userRouter);
+
 
 const mongoDB = process.env.mongoDB_URI;
 
-//database connection
+
 
 async function connectToDB() {
-    await mongoose.connect(mongoDB);
-    console.log("successfully connected to the database");
+ 
+       try{
+        await mongoose.connect(mongoDB);
+        console.log("successfully connected to the database");
+       }catch(e){
+           console.log("error while connection",e);
+       }
+     
+   
 }
 
 connectToDB();
 
-const donorSchema = mongoose.Schema({
-    username: String,
-    firstname: String,
-    lastname: String,
-    password: String,
+const userSchema = mongoose.Schema({
+    name: String,
+    email: String,
+    gender:String,
+    contact:String,
+    address:String,
+    password:String,
+    confirmPassword: String, 
 })
 
-const volunteerSchema = mongoose.Schema({
-    username: String,
-    firstname: String,
-    lastname: String,
-    password: String,
-})
-
-   const donor=mongoose.model("donor",donorSchema);
-   const volunteer=mongoose.model("volunteer",volunteerSchema);
-
-
-   export { donor, volunteer };
+   const Users=mongoose.model("Users",userSchema);
+   export { Users };
 
 
 
