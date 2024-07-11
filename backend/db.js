@@ -37,12 +37,42 @@ const foodSchema = new mongoose.Schema({
         ref: 'Users',
         required: true,
     },
-    foodName: String,
+    foodName: {
+        type: String,
+        required: true,
+    },
     description: String,
-    quantity: Number,
-    expiryDate: Date,
-    donatedDate: { type: Date, default: Date.now },
+    quantity: {
+        type: Number,
+        required: true,
+    },
+    expiryDate: {
+        type: Date,
+        required: true,
+    },
+    donatedDate: {
+        type: Date,
+        default: Date.now,
+    },
+    pickupLocation: {
+        type: String,
+        required: true,
+    },
+    foodType: {
+        type: String,
+        enum: ['Veg', 'Non-Veg'],
+        required: true,
+    },
+    phoneNo: {
+        type: String,
+        required: true,   
+    },
+    note: String,
+    foodImage: String, 
 });
+
+
+
 
 const Users = mongoose.model("Users", userSchema);
 const Foods = mongoose.model("Foods", foodSchema);

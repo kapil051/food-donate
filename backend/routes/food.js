@@ -9,10 +9,15 @@ dotenv.config();
 
 const foodSchema = zod.object({
     foodName: zod.string(),
-    description:zod.string(),
+    description:zod.string().optional(),
     quantity: zod.number().positive(),   
     expiryDate: zod.date(),
     donatedDate: zod.date().default(() => new Date()), 
+    pickupLocation:zod.string(),
+    foodType:zod.string(),
+    phoneNo:zod.string(),
+    note:zod.string().optional(),
+    foodImage:zod.string().optional(),
 });
 
 router.post("/donate", authMiddleware, async (req, res) => {
@@ -55,7 +60,7 @@ router.post("/donate", authMiddleware, async (req, res) => {
             error: error.message,
         });
     }
-    
+
 });
 
 export default router;
