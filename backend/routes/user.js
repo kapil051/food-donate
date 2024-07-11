@@ -1,9 +1,9 @@
 import express from "express";
-const router = express.Router();
 import { Users } from "../db.js";
 import zod from "zod";
 import jwt from "jsonwebtoken";
 
+const router = express.Router();
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -85,7 +85,43 @@ const signinBody = zod.object({
     password: zod.string(),
 })
 
-router.post("/signin",(req,res)=>{
+router.post("/signin",async(req,res)=>{
+    
+       try{
+
+        const {success}=signinBody.safeParse(req.body);
+
+        if(!success){
+            return res.status(411).json({
+                "msg":"incorrect fileds",  
+             })
+        }
+
+         const user=await Users.findOne({
+            email:req.body.email,
+            password:req.body.password,
+         })
+
+         if(!user) {
+            return res.status(411).json({      
+                 "msg":"provide correct mail/password",
+             })
+         }
+
+          const token=jwt.sign({
+            userId:user._id, 
+          },JWT_SECRET)
+
+           res.status(200).json({
+            "msg":"user logged in successfully",
+              user:user,
+                 token,
+          })
+
+
+       }catch(e){
+            console.log("error",e);
+       }
 
 })
 
