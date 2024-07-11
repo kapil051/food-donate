@@ -82,4 +82,24 @@ router.post("/donate", authMiddleware, async (req, res) => {
 
 });
 
+router.get("/allfoods",async (req,res)=>{
+
+      try{
+
+        const allFood = await Foods.find(); // Retrieve all documents from the foods collection
+        return res.json({
+            msg: "All foods fetched successfully",
+            data: allFood
+        });
+
+      }catch(error){
+             console.log("error:",e);
+             return res.json({
+                "msg:":"error while finding all foods",
+                    error,    
+             })
+      }
+
+})
+
 export default router;

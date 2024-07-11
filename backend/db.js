@@ -71,7 +71,6 @@ const foodSchema = new mongoose.Schema({
     foodImage: String, 
 });
 
-
 const Users = mongoose.model("Users", userSchema);
 const Foods = mongoose.model("Foods", foodSchema);
 
