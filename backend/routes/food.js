@@ -1,5 +1,6 @@
 import express from "express";
 import { Foods } from "../db.js";
+import { Users } from "../db.js";
 import zod from "zod";
 import authMiddleware from "../middleware.js"; 
 
@@ -32,6 +33,23 @@ router.post("/donate", authMiddleware, async (req, res) => {
 
         const userId = req.userId;
 
+            //update the user history user donate food 
+
+            const user = await Users.findByIdAndUpdate(
+                userId,
+                {
+                    $push: {
+                        activities: {
+                            action: "donate",
+                            timestamp: new Date()
+                        }
+                    }
+                },
+                { new: true } 
+             );
+          
+             //user updation completed 
+
         const newFood = new Foods({
               userId,
             ...validatedData,
@@ -40,10 +58,11 @@ router.post("/donate", authMiddleware, async (req, res) => {
      
         await newFood.save();
 
-     
+
         return res.status(201).json({
             msg: "Food donation successfully recorded",
               data: newFood,
+               updated_user:user,
         });
     } catch (error) {
      
