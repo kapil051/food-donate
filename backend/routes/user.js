@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { Users } from "../index.js";
+import { Users } from "../db.js";
 import zod from "zod";
 import jwt from "jsonwebtoken";
 
@@ -30,7 +30,6 @@ router.post("/signup", async (req, res, next) => {
     try {
 
         const { success } = signupBody.safeParse(req.body);
-        //  console.log(req.body);
 
         if (!success) {
             return res.status(411).json({
@@ -65,19 +64,28 @@ router.post("/signup", async (req, res, next) => {
             userId:user._id,
          },JWT_SECRET);
 
-         res.json({
+         return res.json({
             "msg":"user created successfully",
                 user:user,
                 token:token,
-       })
+         })
 
     } catch (e) {
+            console.log("error while signup",e);
+             
+               return res.json({
+                  "msg":"error while signup",
+               })
+    }  
 
-            console.log("error:",e);
-         
-    }
+})
 
+const signinBody = zod.object({
+    email: zod.string().email(),
+    password: zod.string(),
+})
 
+router.post("/signin",(req,res)=>{
 
 })
 
