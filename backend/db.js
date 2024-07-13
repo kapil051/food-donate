@@ -6,7 +6,10 @@ const mongoDB = process.env.mongoDB_URI;
 
 async function connectToDB() {
     try {
-        await mongoose.connect(mongoDB);
+        await mongoose.connect(mongoDB,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         console.log("successfully connected to the database");
     } catch (e) {
         console.log("error while connection", e);
