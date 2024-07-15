@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import image from "../../assets/loginImage.png";
-import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
+
 const Login = () => {
+  const { login, loader } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
@@ -15,21 +16,18 @@ const Login = () => {
       ...formData,
       [name]: value
     });
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+
     try {
-      console.log("it is not responding",process.env.REACT_APP_API_URL);
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/signin`, formData);
-      console.log(res.data);
-    } catch (e) {
-      setError('Login failed.');
-      console.log(e);
-    } finally {
-      setLoading(false);
+      await login({ email: formData.email, password: formData.password });
+    } catch (error) {
+      setError(error.response?.data?.msg || 'Login failed. Please check your credentials.');
+      console.error("Login error:", error);
     }
   };
 
@@ -71,9 +69,9 @@ const Login = () => {
               <button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                disabled={loading}
+                disabled={loader}
               >
-                {loading ? 'Logging in...' : 'Login'}
+                {loader ? 'Logging in...' : 'Login'}
               </button>
             </div>
           </form>

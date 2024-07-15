@@ -2,14 +2,9 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 dotenv.config();
 
-const mongoDB = process.env.mongoDB_URI;
-
 async function connectToDB() {
     try {
-        await mongoose.connect(mongoDB,{
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(process.env.MONGODB_URI);
         console.log("successfully connected to the database");
     } catch (e) {
         console.log("error while connection", e);
@@ -30,7 +25,6 @@ const userSchema = new mongoose.Schema({
     contact: String,
     address: String,
     password: String,
-    confirmPassword: String,
     activities: [activitySchema], 
 });
 

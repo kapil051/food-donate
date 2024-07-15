@@ -1,9 +1,14 @@
 import { useContext, useState } from "react";
+// import { AuthContext } from "../AuthProvider/AuthProvider";
+// import axios from "axios";
+// import Swal from "sweetalert2";
+// import Hook from "../Hook/Hook";
 import { Helmet } from "react-helmet";
 import bgimage from "../../assets/background_img/bg_1.jpg";
 
 const DonateForm = () => {
-
+  // const {user} = useContext(AuthContext)
+  // const axiosSecure = Hook()
   const url = "/foods";
 
   // user data
@@ -73,6 +78,19 @@ const DonateForm = () => {
     };
     console.log(foodItems);
 
+    //    axiosSecure.post(url,foodItems)
+    //    .then(data=>{
+    //     console.log(data.data)
+    //     if(data.data.insertedId){
+    //         Swal.fire({
+    //             title: "Congratulations!",
+    //             text: "Added Successfully",
+    //             icon: "success",
+    //             color:"green",
+    //             confirmButtonColor: 'green',
+    //           });
+    //       }
+    //    })
   };
 
   return (
