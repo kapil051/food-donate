@@ -19,11 +19,11 @@ const Carousel = ({ images }) => {
     };
 
     return (
-        <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
+        <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 71px)' }}>
             <div className="flex  transition-transform duration-500" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
                 {images.map((image, index) => (
                     <div key={index} className="w-full flex-shrink-0 h-full relative ">
-                        <img src={image} alt={`Slide ${index}`} className="w-full h-full object-cover bg-center bg-origin-content" />
+                        <img src={image} alt={`Slide ${index}`} className="max-w-full max-h-full min-w-full min-h-full object-cover bg-center bg-origin-content" />
                         {currentIndex === index && (
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <button

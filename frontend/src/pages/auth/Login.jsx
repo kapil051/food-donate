@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import image from "../../assets/loginImage.png";
 import axios from "axios";
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -23,7 +22,8 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/login`, formData);
+      console.log("it is not responding",process.env.REACT_APP_API_URL);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/signin`, formData);
       console.log(res.data);
     } catch (e) {
       setError('Login failed.');
