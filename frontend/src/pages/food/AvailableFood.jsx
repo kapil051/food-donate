@@ -1,21 +1,21 @@
 import React,{useEffect, useState} from "react";
 import Card from "../../components/foodDetails/Card";
-import { foodDetails } from "../../utils/data/FoodDetails";
+import { foodDetails } from "../../utils/data/FoodDetails";/////////
 import { Helmet } from "react-helmet";
 import { TfiLayoutGrid2, TfiLayoutGrid3Alt } from "react-icons/tfi";
-import animationData from '../../assets/lottie/Animation - 1715537156636.json'
+import animationData from '../../assets/lottie/Animation - 1715537156636.json' //////
 import Lottie from 'react-lottie'
 import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-import {dateOptions} from '../../utils/data/FoodFilter'
-import { foodTypeOptions } from "../../utils/data/FoodFilter";
-import { locationOptions } from "../../utils/data/FoodFilter";
+import 'react-dropdown/style.css';        ////
+import {dateOptions} from '../../utils/data/FoodFilter'  ///////
+import { foodTypeOptions } from "../../utils/data/FoodFilter"; ////////
+import { locationOptions } from "../../utils/data/FoodFilter"; ///////
 
 function AvailableFood() {
   
-  const [foods, setfoods] = useState([]);  //foodData
+  const [foods, setfoods] = useState([]);  //foodData 
   const [loader,setLoader] = useState(true)  //lottie
-  const [layout,setLayout] = useState(true) //display
+  const [layout,setLayout] = useState(true) //display 
   const [search, setSearch] = useState([]); //searchData
 
   // sort functions 
