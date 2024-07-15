@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import image from "../../assets/signupImage.svg";
-import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
+
 const SignupPage = () => {
-  const [signupType, setSignupType] = useState("donor");
+  const { register, loader } = useContext(AuthContext);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,8 +21,53 @@ const SignupPage = () => {
       ...formData,
       [name]: value,
     });
+    setError("");
+  };
 
-    console.log(formData);
+  const validatePassword = () => {
+    const { password, confirmPassword } = formData;
+
+    switch (true) {
+      case password !== confirmPassword:
+        return "Passwords do not match";
+      case password.length < 8:
+        return "Password must be at least 8 characters long";
+      case !/[A-Z]/.test(password):
+        return "Password must contain at least one uppercase letter";
+      case !/[a-z]/.test(password):
+        return "Password must contain at least one lowercase letter";
+      case !/[0-9]/.test(password):
+        return "Password must contain at least one number";
+      case !/[!@#$%^&*]/.test(password):
+        return "Password must contain at least one special character";
+      default:
+        return "";
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const passwordError = validatePassword();
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    try {
+      await register({
+        email: formData.email,
+        name: formData.name,
+        gender: formData.gender,
+        contact: formData.contact,
+        address: formData.address,
+        password: formData.password,
+      });
+      console.log("User registered successfully");
+    } catch (error) {
+      console.error("Signup error:", error);
+      setError("Signup failed. Please try again.");
+    }
   };
 
   return (
@@ -29,13 +76,12 @@ const SignupPage = () => {
         <div className="max-w-md w-full">
           <h2 className="text-3xl font-bold mb-6 text-center">Sign Up</h2>
 
-          <div>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+
+          <form onSubmit={handleSubmit}>
             <div>
               <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                   Name:
                 </label>
                 <input
@@ -50,10 +96,7 @@ const SignupPage = () => {
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email:
                 </label>
                 <input
@@ -68,10 +111,7 @@ const SignupPage = () => {
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="gender"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
                   Gender:
                 </label>
                 <select
@@ -90,10 +130,7 @@ const SignupPage = () => {
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="contact"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="contact" className="block text-sm font-medium text-gray-700">
                   Contact Number:
                 </label>
                 <input
@@ -108,10 +145,7 @@ const SignupPage = () => {
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="address"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                   Address:
                 </label>
                 <textarea
@@ -125,10 +159,7 @@ const SignupPage = () => {
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                   Password:
                 </label>
                 <input
@@ -143,10 +174,7 @@ const SignupPage = () => {
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="confirm-password"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
                   Confirm Password:
                 </label>
                 <input
@@ -163,29 +191,14 @@ const SignupPage = () => {
 
             <div>
               <button
-                onClick={async () => {
-                  try {
-                    const res = await axios.post(
-                      "http://localhost:3000/user/signup",
-                      formData,
-                      {
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                      }
-                    );
-                    console.log(res.data);
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={loader}
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${loader ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
               >
-                Sign Up
+                {loader ? "Signing Up..." : "Sign Up"}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
 
