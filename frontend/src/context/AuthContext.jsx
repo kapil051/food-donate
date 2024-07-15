@@ -31,10 +31,11 @@ const AuthProvider = ({ children }) => {
     setLoader(true);
     try {
       const res = await axiosInstance.post("/user/signup", userData);
-      if (res && res.status === 200) {
+      console.log(res)
+      if (res && res.status === 201) {
         setAuthHeader(res.data.token);
         setUser(res.data.user);
-        
+
         Cookies.set('user', JSON.stringify(res.data.user), {
           secure: window.location.protocol === 'https:',
           sameSite: 'Strict',
@@ -59,7 +60,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
+  const login = async ({ email, password }) => {
     setLoader(true);
     try {
       const res = await axiosInstance.post("/user/signin", { email, password });
@@ -78,7 +79,7 @@ const AuthProvider = ({ children }) => {
           sameSite: 'Strict',
           expires: 1
         });
-        
+
         return res.data;
       } else {
         throw new Error(res.data.message || "Login failed");
