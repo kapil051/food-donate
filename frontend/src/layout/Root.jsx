@@ -13,11 +13,11 @@ function Root() {
     }
   return (
     <div>
-        <Header></Header>
+        <Header/>
         <div className='min-h-[calc(100vh-64px)]'>
-            <Outlet></Outlet>
+            <Outlet/>
         </div>
-        <Footer></Footer>
+        <Footer/>
     </div>
   )
 }
