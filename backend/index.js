@@ -11,16 +11,9 @@ dotenv.config();
 const PORT = process.env.PORT || 4000
 
 app.use(express.json());
-app.use(cors({
-    origin:"http://localhost:5173",
-	credentials: true,
-}));
+app.use(cors());
 app.use("/user", userRouter);
 app.use("/food", foodRouter);
-
-
-
-
 
 app.listen(PORT, () => {
     console.log(`app listning on the port ${PORT}`);

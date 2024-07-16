@@ -1,31 +1,48 @@
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 async function connectToDB() {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
-        console.log("successfully connected to the database");
+        console.log("Successfully connected to the database");
     } catch (e) {
-        console.log("error while connection", e);
+        console.log("Error while connecting to the database", e);
     }
 }
 
 connectToDB();
 
 const activitySchema = new mongoose.Schema({
-    action: String,
-    timestamp: { type: Date, default: Date.now },
+    action: {
+        type: String,
+        required: true,
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     gender: String,
     contact: String,
     address: String,
-    password: String,
-    activities: [activitySchema], 
+    password: {
+        type: String,
+        required: true,
+    },
+    activities: [activitySchema],
 });
 
 const foodSchema = new mongoose.Schema({
@@ -57,19 +74,18 @@ const foodSchema = new mongoose.Schema({
     },
     foodType: {
         type: String,
-        enum: ['Veg', 'Non-Veg'],
+        enum: ['veg', 'nonveg'],
         required: true,
     },
     phoneNo: {
         type: String,
-        required: true,   
+        required: true,
     },
     note: String,
-    foodImage: String, 
+    foodImage: String,
 });
 
 const Users = mongoose.model("Users", userSchema);
 const Foods = mongoose.model("Foods", foodSchema);
 
 export { Users, Foods };
-
