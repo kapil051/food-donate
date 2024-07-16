@@ -1,15 +1,14 @@
 import { useContext, useState } from "react";
-// import { AuthContext } from "../AuthProvider/AuthProvider";
-// import axios from "axios";
-// import Swal from "sweetalert2";
-// import Hook from "../Hook/Hook";
+import Hook from "../../context/Hook";
 import { Helmet } from "react-helmet";
 import bgimage from "../../assets/background_img/bg_1.jpg";
-
+import { AuthContext } from '../../context/AuthContext';
+import axios from "axios";
 const DonateForm = () => {
-  // const {user} = useContext(AuthContext)
-  // const axiosSecure = Hook()
-  const url = "/foods";
+  const {user} = useContext(AuthContext)
+  console.log(user);
+  const axiosSecure = Hook()
+
 
   // user data
   const [formData, setFormData] = useState({
@@ -26,8 +25,22 @@ const DonateForm = () => {
     pickup_time: "",
   });
 
+  // initial State
+  const initialState={
+    food_name: "",
+    food_type: "",
+    food_image: "",
+    food_quantity: "",
+    food_note: "",
+    pickup_location: "",
+    expiry_date: "",
+    user_image: "",
+    user_name: "",
+    phone_no: "",
+    pickup_time: "",
+  }
+
   const [image, setImage] = useState(null);
-  const[count,setCount]=useState(0);
   const handleImageChange = (e) => {
     e.preventDefault();
     let reader = new FileReader();
@@ -50,47 +63,40 @@ const DonateForm = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setCount(count+1)
     console.log(formData);
-    console.log(count);
   };
 
   // submit function
-  const handleFoodData = (e) => {
+  const handleFoodData = async(e) => {
     e.preventDefault();
     const form = e.target;
-    setFormState({
+    setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
     const foodItems = {
-      food_name,
-      food_type,
-      food_image,
-      food_quantity,
-      food_note,
-      pickup_location,
-      expiry_date,
-      user_image,
-      user_name,
-      phone_no,
-      pickup_time,
+      food_name:formData.food_name,
+      food_type:formData.food_type,
+      food_image:formData.food_image,
+      food_quantity:formData.food_quantity,
+      food_note:formData.food_note,
+      pickup_location:formData.pickup_location,
+      expiry_date:formData.expiry_date,
+      user_image:formData.user_image,
+      user_name:formData.user_name,
+      phone_no:formData.phone_no,
+      pickup_time:formData.pickup_time,
     };
-    console.log(foodItems);
-
-    //    axiosSecure.post(url,foodItems)
-    //    .then(data=>{
-    //     console.log(data.data)
-    //     if(data.data.insertedId){
-    //         Swal.fire({
-    //             title: "Congratulations!",
-    //             text: "Added Successfully",
-    //             icon: "success",
-    //             color:"green",
-    //             confirmButtonColor: 'green',
-    //           });
-    //       }
-    //    })
+    console.log("got value",formData);
+    try{
+       const res= await axiosSecure.post("/food/donate",formData)
+       console.log("result",res);
+    }
+    catch(error){
+       console.log("error",error.response);
+    }
+      
+    
   };
 
   return (
@@ -110,8 +116,8 @@ const DonateForm = () => {
                  <span className="flex items-center space-y-6 font-bold "><span className="mr-5">Profile-Photo: </span>
                  <img className="border rounded-xl w-24" src={formData.user_image} alt="" /></span>
 
-                 <p className="place-content-betweenfont-bold">Name : {formData.user_name}</p>
-                 <p className="font-bold">Email : email@gmail.com </p>
+                 <p className="place-content-betweenfont-bold">Name : {user.name}</p>
+                 <p className="font-bold">Email : {user.email} </p>
             </div>
         <form
           onSubmit={handleFoodData}
@@ -327,7 +333,7 @@ const DonateForm = () => {
           </div>
           <input
             type="submit"
-            className="btn  text-white cursor-pointer "
+            className="w-full bg-green-600 text-white px-4 py-2 mb-2 rounded-xl hover:bg-green-700 transition duration-300 cursor-pointer "
             onSubmit={handleFoodData}
           />
         </form>
