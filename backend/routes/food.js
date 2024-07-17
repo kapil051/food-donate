@@ -22,7 +22,7 @@ const foodSchema = zod.object({
 });
 
 router.post("/donate", authMiddleware, async (req, res) => {
-
+    res.send("hello")
     try {
     
         if (req.body.expiryDate) {
