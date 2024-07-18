@@ -86,4 +86,36 @@ router.get("/allfoods", async (req, res) => {
     }
 });
 
+
+router.get("/foodId", async (req, res) => {
+
+    try {
+
+        const fid = req.body._id;
+
+        const food = await Foods.findById(fid);
+
+        if (!food) {
+            return res.status(404).json({
+                error: "Food item not found"
+            });
+        }
+
+        return res.status(200).json({
+            food
+        })
+
+
+
+    } catch (e) {
+
+        return res.status(500).json({
+            error: "Error during finding food item",
+            details: e.message
+          });
+
+    }
+
+})
+
 export default router;
