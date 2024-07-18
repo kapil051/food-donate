@@ -72,6 +72,10 @@ const foodSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    pickupTime: {
+        type: String,
+        required: true,
+    },
     foodType: {
         type: String,
         enum: ['veg', 'nonveg'],
