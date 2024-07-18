@@ -8,6 +8,18 @@ dotenv.config();
 
 const router = express.Router();
 
+// {
+//     "foodName": "Rice",
+//     "foodType": "veg",
+//     "description": "A bag of rice",
+//     "quantity": 10,
+//     "expiryDate": "2024-08-01",
+//     "pickupLocation": "123 Main St, City",
+//     "pickupTime":"before 10pm",
+//     "phoneNo": "1234567890",
+//     "note": "Handle with care"
+// }
+
 const foodSchema = zod.object({
     foodName: zod.string(),
     foodType: zod.string(),
@@ -17,6 +29,7 @@ const foodSchema = zod.object({
     expiryDate: zod.date(),
     donatedDate: zod.date().default(() => new Date()),
     pickupLocation: zod.string(),
+    pickupTime:zod.string(),
     phoneNo: zod.string(),
     note: zod.string().optional(),
 });
@@ -30,6 +43,13 @@ router.post("/donate", authMiddleware, async (req, res) => {
         const validatedData = foodSchema.parse(req.body);
         const userId = req.userId;
 
+        const newFood = new Foods({
+            userId,
+            ...validatedData,
+        });
+
+        await newFood.save();
+
         const user = await Users.findByIdAndUpdate(
             userId,
             {
@@ -42,13 +62,6 @@ router.post("/donate", authMiddleware, async (req, res) => {
             },
             { new: true }
         );
-
-        const newFood = new Foods({
-            userId,
-            ...validatedData,
-        });
-
-        await newFood.save();
 
         return res.status(201).json({
             msg: "Food donation successfully recorded",
