@@ -1,5 +1,9 @@
-import React, { useContext } from 'react';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import React, { useContext } from "react";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import Home from "../pages/Home";
 import DonateForm from "../pages/donate/DonateForm";
 import AvailableFood from "../pages/food/AvailableFood";
@@ -10,8 +14,8 @@ import Register from "../pages/auth/Register";
 import Profile from "../pages/user/Profile";
 import MyFoods from "../pages/user/MyFoods";
 import Blogs from "../pages/Blogs";
-import NotFound from "../pages/NotFound"; 
-import { AuthContext } from '../context/AuthContext';
+import NotFound from "../pages/NotFound";
+import { AuthContext } from "../context/AuthContext";
 
 const Router = () => {
   const { user } = useContext(AuthContext);
@@ -34,8 +38,16 @@ const Router = () => {
           element: <AvailableFood />,
         },
         {
-          path: "/food-item",
+          path: "/food-item/:id",
           element: user ? <FoodDetails /> : <Navigate to="/login" />,
+          // loader: async ({ params }) => {
+          //   console.log(params.id)
+          //   const data = await fetch(
+          //     `${import.meta.env.VITE_API_URL}/food/allfoods/${params.id}`
+          //   ).then((data)=>{data.json()});
+          //   console.log(data);
+          //   return data;
+          // },
         },
         {
           path: "/login",
@@ -58,8 +70,8 @@ const Router = () => {
           element: <Blogs />,
         },
         {
-          path: "*", 
-          element: <NotFound />, 
+          path: "*",
+          element: <NotFound />,
         },
       ],
     },

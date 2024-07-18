@@ -16,6 +16,7 @@ const Login = () => {
       ...formData,
       [name]: value
     });
+    console.log(formData)
     setError("");
   };
 
