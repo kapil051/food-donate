@@ -1,12 +1,14 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { Helmet } from "react-helmet";
 import bgimage from "../../assets/background_img/bg_1.jpg";
 import { AuthContext } from '../../context/AuthContext';
-
+import Swal from "sweetalert2";
 const DonateForm = () => {
   const { user, logout } = useContext(AuthContext);
   const [image, setImage] = useState(null);
+  const [minDate, setMinDate] = useState('');
+
   const initialFormState = {
     foodName: "",
     foodType: "veg",
@@ -19,7 +21,9 @@ const DonateForm = () => {
     pickupTime: "",
   };
   const [formData, setFormData] = useState(initialFormState);
+ 
 
+  // for image pick
   const handleImageChange = (e) => {
     e.preventDefault();
     let reader = new FileReader();
@@ -36,6 +40,15 @@ const DonateForm = () => {
     }
   };
 
+  // for date pick 
+  const handleDate=() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    setMinDate(`${yyyy}-${mm}-${dd}`);
+  }
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -48,6 +61,15 @@ const DonateForm = () => {
     try {
       const res = await axiosInstance.post("/food/donate", formData);
       console.log("result", res);
+      if(res){
+        Swal.fire({
+            title: "Congratulations!",
+            text: "Added Successfully",
+            icon: "success",
+            color:"green",
+            confirmButtonColor: 'green',
+          });
+      }
       setFormData(initialFormState);
       setImage(null);
     } catch (error) {
@@ -56,9 +78,18 @@ const DonateForm = () => {
         alert("Please login again. Session has timed out.");
         await logout();
       }
+      Swal.fire({
+        title: "OOPS! Error has occured",
+        text: "You can try again",
+        icon: "error",
+        color:"red",
+        confirmButtonColor: 'red',
+      });
     }
   };
-
+  useEffect(()=>{
+    handleDate();
+  })
   return (
     <div
       className="hero min-h-screen opacity-90 md:p-9 bg-no-repeat flex justify-center"
@@ -181,13 +212,14 @@ const DonateForm = () => {
                 className="input input-bordered"
                 value={formData.expiryDate}
                 onChange={handleChange}
+                min={minDate}
                 required
               />
             </div>
 
             <div>
               <label className="label">
-                <span className="label-text text-black text-lg font-bold">Pickup Time:</span>
+                <span className="label-text text-black text-lg font-bold">Preferrable Pickup Time:</span>
               </label>
               <input
                 type="time"
@@ -221,7 +253,7 @@ const DonateForm = () => {
                   <span className="label-text font-bold text-black text-lg">Phone No:</span>
                 </label>
                 <input
-                  type="text"
+                  type="tel"
                   name="phoneNo"
                   placeholder="10 digits"
                   className="input"
