@@ -131,4 +131,58 @@ router.get("/foodId", async (req, res) => {
 
 })
 
+router.get("/:filter",async(req,res)=>{
+
+       try{
+
+          const filterType=req.params.filter;
+          const filterValue=req.query.value;
+
+           if(!filterValue){
+              return res.status(400).json({
+                message: 'Filter value is required'
+              })
+           }
+
+              let filter={};
+
+            switch(filterType){
+
+                  case 'foodType':
+                      filter.foodType=filterValue;
+                         break;
+                  case 'foodName':
+                      filter.foodName=new RegExp(filterValue,'i');       
+                          break;
+                  case 'pickupLocation':
+                       filter.pickupLocation=new RegExp(filterValue,'i') ;
+                         break;
+                  case 'quantity':
+                     filter.quantity={$gte:
+                        parseInt(filterValue)
+                     };
+                      break;
+                  case 'expiryDate':
+                      filter.expiryDate={
+                        $lte: new Date(filterValue)
+                      };
+                       break;
+                   default:
+                    return res.status(400).json({
+                        message:'Invalid filter type '
+                    }) ;              
+            }
+            
+               const foods=await Foods.find(filter);
+                  res.status(200).json(foods);
+
+       }catch(e){
+            console.error(error);
+            res.status(500).json({
+                  message:"error while finding foods"
+            })
+       }
+
+})
+
 export default router;
