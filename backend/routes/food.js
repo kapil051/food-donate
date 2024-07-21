@@ -8,66 +8,80 @@ dotenv.config();
 
 const router = express.Router();
 
+// {
+//     "foodName": "Rice",
+//     "foodType": "veg",
+//     "description": "A bag of rice",
+//     "quantity": 10,
+//     "expiryDate": "2024-08-01",
+//     "pickupLocation": "123 Main St, City",
+//     "pickupTime":"before 10pm",
+//     "phoneNo": "1234567890",
+//     "note": "Handle with care"
+// }
+
 const foodSchema = zod.object({
-  foodName: zod.string(),
-  foodType: zod.string(),
-  foodImage: zod.string().optional(),
-  description: zod.string().optional(),
-  quantity: zod.number().positive(),
-  expiryDate: zod.date(),
-  donatedDate: zod.date().default(() => new Date()),
-  pickupLocation: zod.string(),
-  phoneNo: zod.string(),
-  note: zod.string().optional(),
+    foodName: zod.string(),
+    foodType: zod.string(),
+    foodImage: zod.string().optional(),
+    description: zod.string().optional(),
+    quantity: zod.number().positive(),
+    expiryDate: zod.date(),
+    donatedDate: zod.date().default(() => new Date()),
+    pickupLocation: zod.string(),
+    pickupTime:zod.string(),
+    phoneNo: zod.string(),
+    note: zod.string().optional(),
 });
 
 router.post("/donate", authMiddleware, async (req, res) => {
-  try {
-    if (req.body.expiryDate) {
-      req.body.expiryDate = new Date(req.body.expiryDate);
+    try {
+        if (req.body.expiryDate) {
+            req.body.expiryDate = new Date(req.body.expiryDate);
+        }
+
+        const validatedData = foodSchema.parse(req.body);
+        const userId = req.userId;
+
+        const newFood = new Foods({
+            userId,
+            ...validatedData,
+        });
+
+        await newFood.save();
+
+        const user = await Users.findByIdAndUpdate(
+            userId,
+            {
+                $push: {
+                    activities: {
+                        action: "donate",
+                        timestamp: new Date(),
+                    },
+                },
+            },
+            { new: true }
+        );
+
+        return res.status(201).json({
+            msg: "Food donation successfully recorded",
+            data: newFood,
+            updated_user: user,
+        });
+    } catch (error) {
+        if (error instanceof zod.ZodError) {
+            return res.status(400).json({
+                msg: "Validation error",
+                errors: error.errors,
+            });
+        }
+
+        return res.status(500).json({
+            msg: "An error occurred while donating food",
+            error: error.message,
+        });
     }
 
-    const validatedData = foodSchema.parse(req.body);
-    const userId = req.userId;
-
-    const user = await Users.findByIdAndUpdate(
-      userId,
-      {
-        $push: {
-          activities: {
-            action: "donate",
-            timestamp: new Date(),
-          },
-        },
-      },
-      { new: true }
-    );
-
-    const newFood = new Foods({
-      userId,
-      ...validatedData,
-    });
-
-    await newFood.save();
-
-    return res.status(201).json({
-      msg: "Food donation successfully recorded",
-      data: newFood,
-      updated_user: user,
-    });
-  } catch (error) {
-    if (error instanceof zod.ZodError) {
-      return res.status(400).json({
-        msg: "Validation error",
-        errors: error.errors,
-      });
-    }
-
-    return res.status(500).json({
-      msg: "An error occurred while donating food",
-      error: error.message,
-    });
-  }
 });
 
 router.get("/foodId", async (req, res) => {
@@ -98,6 +112,60 @@ router.get("/foodId", async (req, res) => {
         });
 
   }
+
+})
+
+router.get("/:filter",async(req,res)=>{
+
+       try{
+
+          const filterType=req.params.filter;
+          const filterValue=req.query.value;
+
+           if(!filterValue){
+              return res.status(400).json({
+                message: 'Filter value is required'
+              })
+           }
+
+              let filter={};
+
+            switch(filterType){
+
+                  case 'foodType':
+                      filter.foodType=filterValue;
+                         break;
+                  case 'foodName':
+                      filter.foodName=new RegExp(filterValue,'i');       
+                          break;
+                  case 'pickupLocation':
+                       filter.pickupLocation=new RegExp(filterValue,'i') ;
+                         break;
+                  case 'quantity':
+                     filter.quantity={$gte:
+                        parseInt(filterValue)
+                     };
+                      break;
+                  case 'expiryDate':
+                      filter.expiryDate={
+                        $lte: new Date(filterValue)
+                      };
+                       break;
+                   default:
+                    return res.status(400).json({
+                        message:'Invalid filter type '
+                    }) ;              
+            }
+            
+               const foods=await Foods.find(filter);
+                  res.status(200).json(foods);
+
+       }catch(e){
+            console.error(error);
+            res.status(500).json({
+                  message:"error while finding foods"
+            })
+       }
 
 })
 
