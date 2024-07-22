@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
             <div className="col-span-full lg:col-span-1">
             <BiSolidDonateHeart className="text-7xl text-white" />
-              <a className="flex-none text-xl font-semibold text-white font-pacifico" href="#" aria-label="Brand">Food Donation </a>
+              <a className="flex-none text-xl font-semibold text-white font-pacifico" href="#" aria-label="Brand">Blessed Baskets</a>
             </div>
            
       
