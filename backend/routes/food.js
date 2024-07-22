@@ -2,7 +2,7 @@ import express from "express";
 import { Foods, Users } from "../db.js";
 import zod from "zod";
 import authMiddleware from "../middleware.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -81,53 +81,37 @@ router.post("/donate", authMiddleware, async (req, res) => {
             error: error.message,
         });
     }
-});
 
-router.get("/allfoods", async (req, res) => {
-    try {
-        const allFood = await Foods.find();
-        return res.json({
-            msg: "All foods fetched successfully",
-            data: allFood,
-        });
-    } catch (error) {
-        console.error("Error:", error);
-        return res.status(500).json({
-            msg: "Error while fetching all foods",
-            error: error.message,
-        });
-    }
 });
-
 
 router.get("/foodId", async (req, res) => {
 
-    try {
+  try {
 
-        const fid = req.body._id;
+      const fid = req.body._id;
 
-        const food = await Foods.findById(fid);
+      const food = await Foods.findById(fid);
 
-        if (!food) {
-            return res.status(404).json({
-                error: "Food item not found"
-            });
-        }
-
-        return res.status(200).json({
-            food
-        })
-
-
-
-    } catch (e) {
-
-        return res.status(500).json({
-            error: "Error during finding food item",
-            details: e.message
+      if (!food) {
+          return res.status(404).json({
+              error: "Food item not found"
           });
+      }
 
-    }
+      return res.status(200).json({
+          food
+      })
+
+
+
+  } catch (e) {
+
+      return res.status(500).json({
+          error: "Error during finding food item",
+          details: e.message
+        });
+
+  }
 
 })
 

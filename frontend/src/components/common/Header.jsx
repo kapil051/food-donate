@@ -21,7 +21,7 @@ const Header = () => {
                 <div className="flex items-center gap-x-4">
                     <BiSolidDonateHeart className="text-6xl" />
                     <Link className="text-xl font-semibold font-pacifico" to="/" aria-label="Brand">
-                        Food Donation
+                        Blessed Baskets
                     </Link>
                 </div>
                 <nav className="hidden md:flex space-x-6">
