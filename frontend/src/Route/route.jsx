@@ -40,14 +40,6 @@ const Router = () => {
         {
           path: "/food-item/:id",
           element: user ? <FoodDetails /> : <Navigate to="/login" />,
-          // loader: async ({ params }) => {
-          //   console.log(params.id)
-          //   const data = await fetch(
-          //     `${import.meta.env.VITE_API_URL}/food/allfoods/${params.id}`
-          //   ).then((data)=>{data.json()});
-          //   console.log(data);
-          //   return data;
-          // },
         },
         {
           path: "/login",
