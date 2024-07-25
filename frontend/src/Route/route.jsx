@@ -12,8 +12,8 @@ import Root from "../layout/Root";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Profile from "../pages/user/Profile";
-import MyFoods from "../pages/user/MyFoods";
-import Blogs from "../pages/Blogs";
+import MyFood from "../pages/history/MyFood";
+import MyFoodRequest from "../pages/history/MyFoodRequest";
 import NotFound from "../pages/NotFound";
 import { AuthContext } from "../context/AuthContext";
 
@@ -40,14 +40,6 @@ const Router = () => {
         {
           path: "/food-item/:id",
           element: user ? <FoodDetails /> : <Navigate to="/login" />,
-          // loader: async ({ params }) => {
-          //   console.log(params.id)
-          //   const data = await fetch(
-          //     `${import.meta.env.VITE_API_URL}/food/allfoods/${params.id}`
-          //   ).then((data)=>{data.json()});
-          //   console.log(data);
-          //   return data;
-          // },
         },
         {
           path: "/login",
@@ -63,11 +55,11 @@ const Router = () => {
         },
         {
           path: "/my-foods",
-          element: user ? <MyFoods /> : <Navigate to="/login" />,
+          element: user ? <MyFood /> : <Navigate to="/login" />,
         },
         {
-          path: "/blogs",
-          element: <Blogs />,
+          path: "/my-foodrequest",
+          element: user ? <MyFoodRequest /> : <Navigate to="/login" />,
         },
         {
           path: "*",

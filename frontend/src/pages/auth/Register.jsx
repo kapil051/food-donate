@@ -1,7 +1,8 @@
 import React, { useState, useContext } from "react";
-import image from "../../assets/signupImage.svg";
+import image from "../../assets/lottie/login.json";
 import { AuthContext } from "../../context/AuthContext";
-
+import Lottie from "react-lottie";
+import Swal from "sweetalert2";
 const SignupPage = () => {
   const { register, loader } = useContext(AuthContext);
   const [error, setError] = useState("");
@@ -45,12 +46,28 @@ const SignupPage = () => {
     }
   };
 
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: image,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const passwordError = validatePassword();
     if (passwordError) {
       setError(passwordError);
+      Swal.fire({
+        title: "Failed! Please try again",
+        text: error,
+        icon: "error",
+        color: "red",
+        confirmButtonColor: "red",
+      });
       return;
     }
 
@@ -64,24 +81,34 @@ const SignupPage = () => {
         password: formData.password,
       });
       console.log("User registered successfully");
-    } catch (error) {
-      console.error("Signup error:", error);
+    } catch (e) {
+      console.error("Signup error:", e);
       setError("Signup failed. Please try again.");
+      Swal.fire({
+        title: "Failed! Please try again",
+        text: error,
+        icon: "error",
+        color: "red",
+        confirmButtonColor: "red",
+      });
     }
   };
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex flex-1 items-center justify-center p-6">
+    <div className="flex min-h-screen bg-[#F5F5F5] pt-16">
+      <div className="flex flex-1 items-center justify-center p-6 py-16">
         <div className="max-w-md w-full">
-          <h2 className="text-3xl font-bold mb-6 text-center">Sign Up</h2>
-
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          <h2 className="text-4xl font-bold mb-6 text-center text-[#353535] leading-tight">
+            Fill your details correctly!
+          </h2>
 
           <form onSubmit={handleSubmit}>
             <div>
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Name:
                 </label>
                 <input
@@ -90,13 +117,16 @@ const SignupPage = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ABD700] focus:border-[#ABD700] sm:text-sm"
                   required
                 />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email:
                 </label>
                 <input
@@ -105,13 +135,16 @@ const SignupPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ABD700] focus:border-[#ABD700] sm:text-sm"
                   required
                 />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Gender:
                 </label>
                 <select
@@ -119,7 +152,7 @@ const SignupPage = () => {
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ABD700] focus:border-[#ABD700] sm:text-sm"
                   required
                 >
                   <option value="">Select Gender</option>
@@ -130,7 +163,10 @@ const SignupPage = () => {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="contact" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="contact"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Contact Number:
                 </label>
                 <input
@@ -139,13 +175,16 @@ const SignupPage = () => {
                   name="contact"
                   value={formData.contact}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ABD700] focus:border-[#ABD700] sm:text-sm"
                   required
                 />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Address:
                 </label>
                 <textarea
@@ -153,13 +192,16 @@ const SignupPage = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ABD700] focus:border-[#ABD700] sm:text-sm"
                   required
                 />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Password:
                 </label>
                 <input
@@ -168,13 +210,16 @@ const SignupPage = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ABD700] focus:border-[#ABD700] sm:text-sm"
                   required
                 />
               </div>
 
               <div className="mb-4">
-                <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="confirm-password"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Confirm Password:
                 </label>
                 <input
@@ -183,7 +228,7 @@ const SignupPage = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ABD700] focus:border-[#ABD700] sm:text-sm"
                   required
                 />
               </div>
@@ -193,7 +238,9 @@ const SignupPage = () => {
               <button
                 type="submit"
                 disabled={loader}
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${loader ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                className={`w-full flex justify-center py-2 leading-tight px-4 border  border-transparent rounded-md shadow-sm text-xl font-medium transition duration-300 ease-in-out hover:bg-black hover:scale-x-110 text-white ${
+                  loader ? "bg-gray-400" : "bg-[#BA75DA] hover:bg-[#353535]"
+                } focus:outline-none`}
               >
                 {loader ? "Signing Up..." : "Sign Up"}
               </button>
@@ -203,11 +250,7 @@ const SignupPage = () => {
       </div>
 
       <div className="hidden lg:flex flex-1 items-center justify-center p-6 lg:h-auto">
-        <img
-          src={image}
-          alt="Sign Up"
-          className="object-contain h-1/2 lg:h-auto lg:w-3/4 mx-auto my-auto"
-        />
+        <Lottie options={defaultOptions} height={550} width={550} />
       </div>
     </div>
   );

@@ -16,10 +16,10 @@ const Header = () => {
     };
 
     return (
-        <header className="bg-white shadow-lg">
-            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <header className="bg-white shadow-lg top-0 left-0 right-0 z-20 fixed ">
+            <div className="container mx-auto px-4 py-2 flex justify-between items-center">
                 <div className="flex items-center gap-x-4">
-                    <BiSolidDonateHeart className="text-6xl" />
+                    <BiSolidDonateHeart className="text-5xl" />
                     <Link className="text-xl font-semibold font-pacifico" to="/" aria-label="Brand">
                         Blessed Baskets
                     </Link>
@@ -29,7 +29,7 @@ const Header = () => {
                     <Link to="/available-food" className="text-gray-800 hover:text-gray-600 py-2">Available Foods</Link>
                     <Link to="/donate-food" className="text-gray-800 hover:text-gray-600 py-2">Donate Food</Link>
                     <Link to="/my-foods" className="text-gray-800 hover:text-gray-600 py-2">My Food</Link>
-                    <Link to="/blogs" className="text-gray-800 hover:text-gray-600 py-2">Blogs</Link>
+                    <Link to="/my-foodrequest" className="text-gray-800 hover:text-gray-600 py-2">My FoodRequest</Link>
                     {user ? (
                         <button
                             onClick={handleLogout}
@@ -41,12 +41,12 @@ const Header = () => {
                     ) : (
                         <>
                             <Link to="/register">
-                                <button className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition duration-300">
+                                <button className="bg-[#ABD700] text-black font-semibold px-4 py-2 rounded-xl  transition duration-300  ease-in-out hover:scale-x-110">
                                     Register
                                 </button>
                             </Link>
                             <Link to="/login">
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition duration-300">
+                                <button className="bg-[#F7BD2E] text-black font-semibold px-4 py-2 rounded-xl  transition duration-300  ease-in-out hover:scale-x-110">
                                     Login
                                 </button>
                             </Link>
@@ -78,12 +78,12 @@ const Header = () => {
                         <Link to="/available-food" className="block text-gray-800 hover:text-gray-600 py-2">Available Foods</Link>
                         <Link to="/donate-food" className="block text-gray-800 hover:text-gray-600 py-2">Donate Food</Link>
                         <Link to="/my-foods" className="block text-gray-800 hover:text-gray-600 py-2">My Food</Link>
-                        <Link to="/blogs" className="block text-gray-800 hover:text-gray-600 py-2">Blogs</Link>
+                        <Link to="/my-foodrequest" className="block text-gray-800 hover:text-gray-600 py-2">My FoodRequest</Link>
                         {user ? <button className="w-full bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition duration-300" onClick={handleLogout} disabled={loader}>{loader ? "Logging Out" : "Logout"}</button> : (<><Link to="/register">
-                            <button className="w-full bg-green-600 text-white px-4 py-2 mb-2 rounded-xl hover:bg-green-700 transition duration-300">Sign Up</button>
+                            <button className="w-full bg-[#ABD700] text-black font-semibold px-4 py-2 mb-2 rounded-xl">Sign Up</button>
                         </Link>
                             <Link to="/login">
-                                <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition duration-300">Login</button>
+                                <button className="w-full bg-[#F7BD2E] text-black font-semibold px-4 py-2 rounded-xl">Login</button>
                             </Link></>)}
                     </nav>
                 </div>

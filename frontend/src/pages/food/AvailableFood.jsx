@@ -118,18 +118,18 @@ function AvailableFood() {
     }
 
     return (
-        <div className="mb-20">
+        <div className="pb-20 pt-16 bg-[#F5F5F5]">
             <Helmet>
                 <html lang="en" />
                 <title>Available Foods</title>
                 <meta name="description" content="Basic example" />
             </Helmet>
-            <div className="space-y-3 mb-10">
+            <div className="space-y-3 mb-10 ">
                 <h5 className="text-xl text-center font-mono mt-14">
                     Let's Take Care of Each Other
                 </h5>
-                <h1 className="text-5xl font-medium text-center">
-                    Enjoy & Eat <span className="text-lime-500">Together</span>
+                <h1 className="text-5xl font-medium text-center py-10">
+                    Enjoy & Eat <span className="text-[#ABD700]">Together</span>
                 </h1>
             </div>
             <div className="flex justify-center mb-10">
@@ -145,8 +145,8 @@ function AvailableFood() {
                     </label>
                 </div>
             </div>
-            <div className="text-center flex flex-col items-center">
-                <div className="grid md:grid-cols-3 grid-cols-1 w-10/12">
+            <div className="text-center flex flex-col items-center py-10">
+                <div className="grid md:grid-cols-3 grid-cols-1 w-10/12 py-10">
                     <Dropdown
                         options={dateOptions}
                         onChange={handleSortDate}
@@ -169,25 +169,21 @@ function AvailableFood() {
                         controlClassName="bg-blue-500 font-semibold py-2 px-4 w-full rounded-md"
                     />
                 </div>
-                <div className="md:flex justify-center mb-3 hidden cursor-pointer">
-                    {layout ? (
-                        <TfiLayoutGrid3Alt className="text-xl" onClick={handleLayout} />
-                    ) : (
-                        <TfiLayoutGrid2 className="text-xl" onClick={handleLayout} />
-                    )}
-                </div>
             </div>
             {search.length > 0 ? (
-                <div className={`md:grid gap-6 md:w-auto w-72 md:ml-5 flex flex-col mx-auto ${layout ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+                <div>
+                    <div className="grid md:grid-cols-2 grid-cols-1 gap-y-40 lg:gap-x-40 gap-x-32 w-11/12  mx-auto place-items-center  ">
                     {search.map((foodItem) => (
                         <Card key={foodItem._id} item={foodItem} />
                     ))}
                 </div>
+                </div>
+
             ) : (
                 <div className="flex flex-col justify-center">
                     <Lottie options={defaultAvailability} height={400} width={400} />
                     <div className="text-5xl font-medium text-center">
-                        Sorry, No available food!
+                        Sorry, No available food !!
                     </div>
                 </div>
             )}

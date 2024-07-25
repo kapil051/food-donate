@@ -265,7 +265,7 @@ const DonateForm = () => {
           </div>
           <input
             type="submit"
-            className="w-full bg-green-600 text-white px-4 py-2 mb-2 rounded-xl hover:bg-green-700 transition duration-300 cursor-pointer"
+            className="w-full bg-[#ABD700] text-black font-semibold text-xl px-4 py-2 mb-2 rounded-xl hover:bg-[#9bc202] transition duration-300 cursor-pointer"
           />
         </form>
       </div>
