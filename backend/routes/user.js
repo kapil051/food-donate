@@ -109,35 +109,34 @@ router.post("/signin", async (req, res) => {
     }
 })
 
-router.get("/userId", async (req, res) => {
-
+router.get("/:userId", async (req, res) => {
     try {
-      const userId = req.body._id;
-      if (!userId) {
-        return res.status(400).json({
-          msg: "User ID is required"
+        const { userId } = req.params;
+
+        if (!userId) {
+            return res.status(400).json({
+                msg: "User ID is required"
+            });
+        }
+
+        const user = await Users.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                msg: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            user
         });
-      }
-      
-      const user = await Users.findById(userId);
-  
-      if (!user) {
-        return res.status(404).json({
-          msg: "User not found"
-        });
-      }
-  
-      return res.status(200).json({
-        user 
-      });
-  
     } catch (e) {
-      return res.status(500).json({
-        msg: "Error during finding user",
-         error: e.message
-      });
+        return res.status(500).json({
+            msg: "Error during finding user",
+            error: e.message
+        });
     }
-  });
+});
 
 
 export default router;
