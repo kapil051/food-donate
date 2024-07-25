@@ -36,9 +36,15 @@ const foodSchema = zod.object({
 
 router.post("/donate", authMiddleware, async (req, res) => {
     try {
+     
         if (req.body.expiryDate) {
-            req.body.expiryDate = new Date(req.body.expiryDate);
+            const expiryDate = new Date(req.body.expiryDate);
+            expiryDate.setHours(23, 59, 59, 999);
+            const offset = 5.5 * 60 * 60 * 1000;
+            const expiryDateInIST = new Date(expiryDate.getTime() + offset);
+            req.body.expiryDate = expiryDateInIST;
         }
+
 
         const validatedData = foodSchema.parse(req.body);
         const userId = req.userId;
@@ -84,10 +90,26 @@ router.post("/donate", authMiddleware, async (req, res) => {
 
 });
 
+router.get('/allfoods', async (req, res) => {
+    try {
+        const today = new Date();
+        today.setHours(23, 58, 58, 999); 
+        const offset = 5.5 * 60 * 60 * 1000; 
+        const todayInIST = new Date(today.getTime() + offset);
+
+        const foods = await Foods.find({ expiryDate: { $gte: todayInIST } });
+        return res.status(200).json(foods);
+    } catch (error) {
+        console.error("error: ", error);
+        return res.status(500).json({ error: "An error occurred while retrieving foods" });
+    }
+});
+
+
+
 router.get("/detail/:foodId", async (req, res) => {
     try {
         const fid = req.params.foodId;  
-        console.log(`Fetching details for food item with ID: ${fid}`);
 
         const food = await Foods.findById(fid);
 
@@ -111,15 +133,6 @@ router.get("/detail/:foodId", async (req, res) => {
 
 
 
-router.get('/allfoods', async (req, res) => {
-    try {
-        const foods = await Foods.find({});
-        return res.status(200).json(foods);
-    } catch (error) {
-        console.error("error: ", error);
-        return res.status(500).json({ error: "An error occurred while retrieving foods" });
-    }
-});
 
 
 export default router;

@@ -75,9 +75,9 @@ const signinBody = zod.object({
 
 router.post("/signin", async (req, res) => {
     try {
-        console.log(req.body)
+       // console.log(req.body)
         const { success } = signinBody.safeParse(req.body);
-        console.log(success);
+        //console.log(success);
         if (!success) {
             return res.status(400).json({ msg: "Invalid input fields" });
         }
@@ -111,6 +111,7 @@ router.post("/signin", async (req, res) => {
 
 router.get("/:userId", async (req, res) => {
     try {
+
         const { userId } = req.params;
 
         if (!userId) {
