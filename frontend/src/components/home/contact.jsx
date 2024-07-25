@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import contact from "../../assets/background_img/contact.jpg";
-import { useForm } from "react-hook-form";
+import contact from "../../assets/lottie/contact.json";
 import emailjs from "@emailjs/browser";
+import Lottie from "react-lottie";
 import Swal from "sweetalert2";;
 const Contact = () => {
   const initialData={
@@ -16,6 +16,14 @@ const Contact = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData:contact,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
   };
   // function to handle form submission
   const handleSubmit = async (e) => {
@@ -54,18 +62,18 @@ const Contact = () => {
       setFormData(initialData)
   };
   return (
-    <div className="grid max-w-screen-xl grid-cols-1 gap-8 px-8 py-16 mx-auto rounded-lg md:grid-cols-2 md:px-12 lg:px-16 xl:px-32 dark:bg-gray-100 dark:text-gray-800">
+    <div className="grid max-w-screen-xl grid-cols-1 gap-8 px-8 py-20 mx-auto rounded-lg md:grid-cols-2 md:px-12 lg:px-16 xl:px-32 dark:bg-gray-100 dark:text-gray-800">
       <div className="flex flex-col justify-between items-center ">
         <div className="space-y-2">
           <h2 className="text-4xl font-bold leading-tight lg:text-5xl">
             Contact Us
           </h2>
-          <div className="dark:text-gray-600">
+          <div className="dark:text-gray-600 py-4">
             Contact now if you need to know anything regarding about our
             service.
           </div>
         </div>
-        <img src={contact} alt="" className="  p-6  w- h-[350px] " />
+        <Lottie options={defaultOptions}  />
       </div>
       <form
         noValidate=""
@@ -115,7 +123,7 @@ const Contact = () => {
             className=" input input-bordered w-full p-3 rounded dark:bg-gray-100"
           ></textarea>
         </div>
-        <button className=" w-full bg-green-600 text-white px-4 py-2 mb-2 rounded-xl hover:bg-green-700 transition duration-300 cursor-pointer">
+        <button className=" w-full bg-[#EB6B6B] text-white px-4 py-2 mb-2 rounded-md text-lg font-semibold hover:bg-black transition duration-300  ease-in-out hover:scale-x-110 cursor-pointer">
           Send Messages
         </button>
       </form>

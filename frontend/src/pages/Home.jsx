@@ -7,12 +7,12 @@ import Delivery from "../components/home/delivery";
 import { Helmet } from "react-helmet";
 function Home() {
   const images = [
-    "https://st3.depositphotos.com/19129450/36983/i/450/depositphotos_369839526-stock-photo-banner-donation-food-supplies-crisis.jpg",
-    "https://img.freepik.com/premium-vector/people-giving-donation-box-with-food-charity-solidarity_37925-5451.jpg",
-    "https://previews.123rf.com/images/addtodsaporn/addtodsaporn1910/addtodsaporn191000119/132655197-the-hands-of-the-poor-receive-charity-food-service-from-volunteers-the-concept-of-poverty-and-hungry.jpg",
+    "https://t4.ftcdn.net/jpg/03/81/88/83/360_F_381888369_ZTrVfffe65HXAZhuJjv99xo5l74CO6Mo.jpg",
+    "https://www.narayanseva.org/wp-content/uploads/2023/10/Blog68.jpg",
+    "https://wishesandblessings.net/public/images/food_all.jpg",
   ];
   return (
-    <div>
+    <div className="bg-[#F5F5F5] pt-16">
       <Helmet>
         <html lang="en" />
         <title>Blessed Baskets</title>

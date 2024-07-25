@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
-import image from "../../assets/loginImage.png";
+import image from "../../assets/lottie/signup.json";
 import { AuthContext } from "../../context/AuthContext";
-
+import Lottie from "react-lottie";
+import Swal from "sweetalert2";
 const Login = () => {
   const { login, loader } = useContext(AuthContext);
   const [formData, setFormData] = useState({
@@ -9,6 +10,15 @@ const Login = () => {
     password: ''
   });
   const [error, setError] = useState('');
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: image,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,10 +43,10 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex flex-1 items-center justify-center p-6">
+    <div className="flex min-h-screen bg-[#F5F5F5] pt-16">
+      <div className="flex flex-1 items-center justify-center p-6 py-16">
         <div className="max-w-md w-full">
-          <h2 className="text-3xl font-bold mb-6 text-center">Welcome Back!</h2>
+          <h2 className="text-4xl font-bold mb-6 text-center  leading-tight">Welcome Back!</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
@@ -69,7 +79,7 @@ const Login = () => {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-lg transition duration-300 ease-in-out font-medium text-white bg-indigo-600 hover:bg-black hover:scale-x-110 focus:outline-none"
                 disabled={loader}
               >
                 {loader ? 'Logging in...' : 'Login'}
@@ -80,7 +90,7 @@ const Login = () => {
       </div>
 
       <div className="hidden lg:flex flex-1 items-center justify-center p-6 lg:h-auto">
-        <img src={image} alt="Login" className="object-contain h-1/2 lg:h-auto lg:w-3/4 mx-auto my-auto" />
+       <Lottie options={defaultOptions} height={550} width={550} />
       </div>
     </div>
   );
