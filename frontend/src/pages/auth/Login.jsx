@@ -3,6 +3,7 @@ import image from "../../assets/lottie/signup.json";
 import { AuthContext } from "../../context/AuthContext";
 import Lottie from "react-lottie";
 import Swal from "sweetalert2";
+
 const Login = () => {
   const { login, loader } = useContext(AuthContext);
   const [formData, setFormData] = useState({

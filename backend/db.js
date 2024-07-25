@@ -19,6 +19,11 @@ const activitySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    food:{
+        type:Object,
+        default:{},
+        required:true,
+    },
     timestamp: {
         type: Date,
         default: Date.now,

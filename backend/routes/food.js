@@ -50,7 +50,7 @@ router.post("/donate", authMiddleware, async (req, res) => {
         const userId = req.userId;
 
         const newFood = new Foods({
-            userId,
+                userId,
             ...validatedData,
         });
 
@@ -62,6 +62,7 @@ router.post("/donate", authMiddleware, async (req, res) => {
                 $push: {
                     activities: {
                         action: "donate",
+                        food:newFood,
                         timestamp: new Date(),
                     },
                 },
