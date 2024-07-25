@@ -29,7 +29,7 @@ const foodSchema = zod.object({
     expiryDate: zod.date(),
     donatedDate: zod.date().default(() => new Date()),
     pickupLocation: zod.string(),
-    pickupTime:zod.string(),
+    pickupTime: zod.string(),
     phoneNo: zod.string(),
     note: zod.string().optional(),
 });
@@ -84,89 +84,42 @@ router.post("/donate", authMiddleware, async (req, res) => {
 
 });
 
-router.get("/foodId", async (req, res) => {
+router.get("/detail/:foodId", async (req, res) => {
+    try {
+        const fid = req.params.foodId;  
+        console.log(`Fetching details for food item with ID: ${fid}`);
 
-  try {
+        const food = await Foods.findById(fid);
 
-      const fid = req.body._id;
+        if (!food) {
+            return res.status(404).json({
+                error: "Food item not found"
+            });
+        }
 
-      const food = await Foods.findById(fid);
-
-      if (!food) {
-          return res.status(404).json({
-              error: "Food item not found"
-          });
-      }
-
-      return res.status(200).json({
-          food
-      })
-
-
-
-  } catch (e) {
-
-      return res.status(500).json({
-          error: "Error during finding food item",
-          details: e.message
+        return res.status(200).json({
+            food
         });
 
-  }
+    } catch (e) {
+        return res.status(500).json({
+            error: "Error during finding food item",
+            details: e.message
+        });
+    }
+});
 
-})
 
-router.get("/:filter",async(req,res)=>{
 
-       try{
+router.get('/allfoods', async (req, res) => {
+    try {
+        const foods = await Foods.find({});
+        return res.status(200).json(foods);
+    } catch (error) {
+        console.error("error: ", error);
+        return res.status(500).json({ error: "An error occurred while retrieving foods" });
+    }
+});
 
-          const filterType=req.params.filter;
-          const filterValue=req.query.value;
-
-           if(!filterValue){
-              return res.status(400).json({
-                message: 'Filter value is required'
-              })
-           }
-
-              let filter={};
-
-            switch(filterType){
-
-                  case 'foodType':
-                      filter.foodType=filterValue;
-                         break;
-                  case 'foodName':
-                      filter.foodName=new RegExp(filterValue,'i');       
-                          break;
-                  case 'pickupLocation':
-                       filter.pickupLocation=new RegExp(filterValue,'i') ;
-                         break;
-                  case 'quantity':
-                     filter.quantity={$gte:
-                        parseInt(filterValue)
-                     };
-                      break;
-                  case 'expiryDate':
-                      filter.expiryDate={
-                        $lte: new Date(filterValue)
-                      };
-                       break;
-                   default:
-                    return res.status(400).json({
-                        message:'Invalid filter type '
-                    }) ;              
-            }
-            
-               const foods=await Foods.find(filter);
-                  res.status(200).json(foods);
-
-       }catch(e){
-            console.error(error);
-            res.status(500).json({
-                  message:"error while finding foods"
-            })
-       }
-
-})
 
 export default router;
