@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "../../components/foodDetails/Card";
 import { Helmet } from "react-helmet";
-import { TfiLayoutGrid2, TfiLayoutGrid3Alt } from "react-icons/tfi";
 import Lottie from "react-lottie";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
@@ -12,59 +11,17 @@ import noavailable from "../../assets/lottie/navailable1.json";
 function AvailableFood() {
     const [foods, setFoods] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [layout, setLayout] = useState(true);
     const [search, setSearch] = useState([]);
     const [available, setAvailable] = useState(false);
     const [dateOptions, setDateOptions] = useState([]);
     const [foodTypeOptions, setFoodTypeOptions] = useState([]);
     const [locationOptions, setLocationOptions] = useState([]);
-
-    const extractOptions = (data) => {
-        const uniqueFoodTypes = Array.from(new Set(data.map(item => item.foodType.toLowerCase())));
-        setFoodTypeOptions([{ value: "all", label: "All Food Types" }, ...uniqueFoodTypes.map(type => ({ value: type, label: type }))]);
-
-        const uniqueLocations = Array.from(new Set(data.map(item => item.pickupLocation.toLowerCase())));
-        setLocationOptions([{ value: "all", label: "All Locations" }, ...uniqueLocations.map(location => ({ value: location, label: location }))]);
-
-        setDateOptions([
-            { value: "ascend", label: "Oldest to Latest" },
-            { value: "descend", label: "Latest to Oldest" },
-            { value: "all", label: "All Dates" }
-        ]);
-    };
-
-    // Sort functions
-    const handleSortDate = (sort) => {
-        let sortedData = [];
-        if (sort.value === "ascend") {
-            sortedData = [...search].sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
-        } else if (sort.value === "descend") {
-            sortedData = [...search].sort((a, b) => new Date(b.expiryDate) - new Date(a.expiryDate));
-        } else {
-            sortedData = [...foods];
-        }
-        setSearch(sortedData);
-    };
-
-    const handleSortFood = (sort) => {
-        if (sort.value === "all") {
-            setSearch([...foods]);
-        } else {
-            setSearch(foods.filter((f) => f.foodType.toLowerCase() === sort.value));
-        }
-    };
-
-    const handleSortLocation = (sort) => {
-        if (sort.value === "all") {
-            setSearch([...foods]);
-        } else {
-            setSearch(foods.filter((f) => f.pickupLocation.toLowerCase().includes(sort.value)));
-        }
-    };
-
-    const handleLayout = () => {
-        setLayout(!layout);
-    };
+    const [filters, setFilters] = useState({
+        date: 'all',
+        foodType: 'all',
+        location: 'all',
+        search: ''
+    });
 
     const defaultOptions = {
         loop: true,
@@ -84,18 +41,65 @@ function AvailableFood() {
         },
     };
 
+    const extractOptions = (data) => {
+        const uniqueFoodTypes = Array.from(new Set(data.map(item => item.foodType.toLowerCase())));
+        setFoodTypeOptions([{ value: "all", label: "All Food Types" }, ...uniqueFoodTypes.map(type => ({ value: type, label: type }))]);
+
+        const uniqueLocations = Array.from(new Set(data.map(item => item.pickupLocation.toLowerCase())));
+        setLocationOptions([{ value: "all", label: "All Locations" }, ...uniqueLocations.map(location => ({ value: location, label: location }))]);
+
+        setDateOptions([
+            { value: "ascend", label: "Oldest to Latest" },
+            { value: "descend", label: "Latest to Oldest" },
+            { value: "all", label: "All Dates" }
+        ]);
+    };
+
+    const applyFiltersAndSort = (data) => {
+        let filteredData = [...data];
+
+        if (filters.search) {
+            filteredData = filteredData.filter(item => item.foodName.toLowerCase().includes(filters.search.toLowerCase()));
+        }
+
+        if (filters.foodType !== 'all') {
+            filteredData = filteredData.filter(item => item.foodType.toLowerCase() === filters.foodType.toLowerCase());
+        }
+
+        if (filters.location !== 'all') {
+            filteredData = filteredData.filter(item => item.pickupLocation.toLowerCase().includes(filters.location.toLowerCase()));
+        }
+
+        if (filters.date === 'ascend') {
+            filteredData.sort((a, b) => new Date(a.donatedDate) - new Date(b.donatedDate));
+        } else if (filters.date === 'descend') {
+            filteredData.sort((a, b) => new Date(b.donatedDate) - new Date(a.donatedDate));
+        }
+
+        return filteredData;
+    };
+
+    const handleFilterChange = (type) => (filter) => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [type]: filter.value
+        }));
+    };
+
     const handleSearch = (e) => {
-        const searchQuery = e.target.value.toLowerCase();
-        setSearch(foods.filter((f) => f.foodName.toLowerCase().includes(searchQuery)));
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            search: e.target.value
+        }));
     };
 
     const fetchFood = async () => {
         try {
             const res = await axiosInstance.get("/food/allfoods");
             if (res.status === 200) {
-                const fetchedFoods = res.data.data;
+                const fetchedFoods = res.data;
                 setFoods(fetchedFoods);
-                setSearch(fetchedFoods);
+                setSearch(applyFiltersAndSort(fetchedFoods));
                 setAvailable(fetchedFoods.length > 0);
                 extractOptions(fetchedFoods);
             } else {
@@ -113,6 +117,10 @@ function AvailableFood() {
         fetchFood();
     }, []);
 
+    useEffect(() => {
+        setSearch(applyFiltersAndSort(foods));
+    }, [filters, foods]);
+
     if (loader) {
         return <Lottie options={defaultOptions} height={400} width={400} />;
     }
@@ -122,7 +130,7 @@ function AvailableFood() {
             <Helmet>
                 <html lang="en" />
                 <title>Available Foods</title>
-                <meta name="description" content="Basic example" />
+                <meta name="description" content="Available food items" />
             </Helmet>
             <div className="space-y-3 mb-10 ">
                 <h5 className="text-xl text-center font-mono mt-14">
@@ -149,21 +157,21 @@ function AvailableFood() {
                 <div className="grid md:grid-cols-3 grid-cols-1 w-10/12 py-10">
                     <Dropdown
                         options={dateOptions}
-                        onChange={handleSortDate}
+                        onChange={handleFilterChange('date')}
                         placeholder="Sort By Date"
                         className="rounded-md m-1 mb-8 flex flex-row items-center shadow-lg"
                         controlClassName="bg-blue-500 font-semibold py-2 px-4 w-full rounded-md"
                     />
                     <Dropdown
                         options={foodTypeOptions}
-                        onChange={handleSortFood}
+                        onChange={handleFilterChange('foodType')}
                         placeholder="Food Type"
                         className="rounded-md m-1 mb-8 flex flex-row items-center shadow-lg"
                         controlClassName="bg-blue-500 font-semibold py-2 px-4 w-full rounded-md"
                     />
                     <Dropdown
                         options={locationOptions}
-                        onChange={handleSortLocation}
+                        onChange={handleFilterChange('location')}
                         placeholder="Location"
                         className="rounded-md m-1 mb-8 flex flex-row items-center shadow-lg"
                         controlClassName="bg-blue-500 font-semibold py-2 px-4 w-full rounded-md"
@@ -172,13 +180,12 @@ function AvailableFood() {
             </div>
             {search.length > 0 ? (
                 <div>
-                    <div className="grid md:grid-cols-2 grid-cols-1 gap-y-40 lg:gap-x-40 gap-x-32 w-11/12  mx-auto place-items-center  ">
-                    {search.map((foodItem) => (
-                        <Card key={foodItem._id} item={foodItem} />
-                    ))}
+                    <div className="grid md:grid-cols-2 grid-cols-1 gap-y-40 lg:gap-x-40 gap-x-32 w-11/12 mx-auto place-items-center">
+                        {search.map((foodItem) => (
+                            <Card key={foodItem._id} item={foodItem} />
+                        ))}
+                    </div>
                 </div>
-                </div>
-
             ) : (
                 <div className="flex flex-col justify-center">
                     <Lottie options={defaultAvailability} height={400} width={400} />
