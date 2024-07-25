@@ -91,6 +91,36 @@ router.post("/donate", authMiddleware, async (req, res) => {
 
 });
 
+router.post("/request/:foodId",authMiddleware,async(req,res)=>{
+
+      try{
+
+                   const foodId=req.params.foodId;
+                 const food=await Foods.findById(foodId);  
+
+                  const donor=await Users.findById(food.userId);
+                     const all_activity=donor.activities;
+
+                     const idx = all_activity.findIndex(activity => activity.food._id.toString() === foodId);
+
+                           console.log("idx:",idx);
+                        //   all_activity[idx].is_delivered=true;
+           
+               return res.status(200).json({
+                     idx,
+                     donor,
+                   msg:"success"
+               })
+
+      }catch(e){
+            console.log(e.message);
+        return res.status(200).json({
+            msg:"error"
+        })
+      }
+
+})
+
 router.get('/allfoods', async (req, res) => {
     try {
         const today = new Date();
@@ -131,9 +161,6 @@ router.get("/detail/:foodId", async (req, res) => {
         });
     }
 });
-
-
-
 
 
 export default router;
