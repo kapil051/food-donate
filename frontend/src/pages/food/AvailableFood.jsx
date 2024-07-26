@@ -41,12 +41,28 @@ function AvailableFood() {
         },
     };
 
-    const extractOptions = (data) => {
-        const uniqueFoodTypes = Array.from(new Set(data.map(item => item.foodType.toLowerCase())));
-        setFoodTypeOptions([{ value: "all", label: "All Food Types" }, ...uniqueFoodTypes.map(type => ({ value: type, label: type }))]);
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
 
-        const uniqueLocations = Array.from(new Set(data.map(item => item.pickupLocation.toLowerCase())));
-        setLocationOptions([{ value: "all", label: "All Locations" }, ...uniqueLocations.map(location => ({ value: location, label: location }))]);
+    const extractOptions = (data) => {
+        const foodTypeSet = new Set();
+        const locationSet = new Set();
+
+        data.forEach(item => {
+            foodTypeSet.add(item.foodType.trim().toLowerCase());
+            locationSet.add(item.pickupLocation.trim().toLowerCase());
+        });
+
+        setFoodTypeOptions([
+            { value: "all", label: "All Food Types" },
+            ...Array.from(foodTypeSet).map(type => ({ value: type, label: capitalizeFirstLetter(type) }))
+        ]);
+
+        setLocationOptions([
+            { value: "all", label: "All Locations" },
+            ...Array.from(locationSet).map(location => ({ value: location, label: capitalizeFirstLetter(location) }))
+        ]);
 
         setDateOptions([
             { value: "ascend", label: "Oldest to Latest" },
@@ -132,7 +148,7 @@ function AvailableFood() {
                 <title>Available Foods</title>
                 <meta name="description" content="Available food items" />
             </Helmet>
-            <div className="space-y-3 mb-10 ">
+            <div className="space-y-3 mb-10">
                 <h5 className="text-xl text-center font-mono mt-14">
                     Let's Take Care of Each Other
                 </h5>
