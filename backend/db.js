@@ -24,6 +24,10 @@ const activitySchema = new mongoose.Schema({
         default:{},
         required:true,
     },
+    isDelivered:{
+        type:Boolean,
+        default:false,
+    },
     timestamp: {
         type: Date,
         default: Date.now,

@@ -101,15 +101,14 @@ router.post("/request/:foodId",authMiddleware,async(req,res)=>{
                   const donor=await Users.findById(food.userId);
                      const all_activity=donor.activities;
 
-                     const idx = all_activity.findIndex(activity => activity.food._id.toString() === foodId);
+                const idx = all_activity.findIndex(activity => activity.food._id.toString() === foodId);
 
-                           console.log("idx:",idx);
-                        //   all_activity[idx].is_delivered=true;
+                        all_activity[idx].isDelivered=true;
            
                return res.status(200).json({
-                     idx,
-                     donor,
-                   msg:"success"
+                       idx,
+                      donor,
+                    msg:"success"
                })
 
       }catch(e){
