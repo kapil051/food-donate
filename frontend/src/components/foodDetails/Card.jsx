@@ -64,20 +64,6 @@ function Card({ item }) {
             Expiry Date: {item.expiryDate.substr(0, 10)}
           </span>
           <div className="mt-4 flex-col flex  w-full gap-y-4">
-            <div className="flex items-center">
-              <FaUserCircle
-                className="text-gray-700 dark:text-gray-200"
-                size={24}
-              />
-              <a
-                href="#"
-                className="mx-2 font-semibold text-gray-700 dark:text-gray-200"
-                tabIndex="0"
-                role="link"
-              >
-                User Name
-              </a>
-            </div>
             <Link to={`/food-item/${item._id}`}>
               <button className="self-center w-full bg-[#BA75DA] text-black  font-semibold px-4 py-2 mb-2 rounded-md  hover:bg-[#353535] hover:scale-x-105 hover:text-white transition duration-300 ease-in-out cursor-pointer">
                 View Details

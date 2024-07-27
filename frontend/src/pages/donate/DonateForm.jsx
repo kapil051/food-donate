@@ -93,24 +93,17 @@ const DonateForm = () => {
   })
   return (
     <div
-      className="hero min-h-screen opacity-90 md:p-9 bg-no-repeat flex justify-center"
-      style={{ backgroundImage: `url(${bgimage})`, backgroundSize: "cover" }}
-    >
+      className=" bg-[#F5F5F5] flex  flex-col items-center pt-20 pb-16">
       <Helmet>
         <html lang="en" />
         <title>Donate</title>
         <meta name="description" content="Donate food form" />
       </Helmet>
-      <div className="card bg-white bg-opacity-50 shadow-lg px-6 py-16 mb-5 mt-5 w-10/12">
-        <div className="p-6 mb-10 border border-black shadow-b shadow-2xl bg-white bg-opacity-60 rounded-xl space-y-6">
-          <h1 className="text-2xl font-semibold">Donor Info</h1>
-          <p className="font-bold">Name: {user.name}</p>
-          <p className="font-bold">Email: {user.email}</p>
-        </div>
-
-        <form onSubmit={handleFoodData} className="grid grid-cols-1 gap-y-10">
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-y-10 gap-x-10 w-full place-content-between place-items-stretch">
-            <div className="md:gap-y-2 grid grid-cols-1 gap-y-4">
+      <div className="card bg-white  shadow-lg px-6 py-16 mb-5 mt-5 w-10/12 flex flex-col items-center justify-center">
+       <div className=" md:text-4xl text-2xl text-center font-bold pb-10">Fill the form correctly !!</div>
+        <form onSubmit={handleFoodData} className="flex flex-col w-11/12 items-center gap-y-10">
+          <div className=" grid md:grid-cols-2 grid-cols-1 gap-y-10  gap-x-40 w-10/12 place-content-center place-items-stretch">
+            <div className="md:gap-y-4 grid grid-cols-1 gap-y-4 place-items-start">
               <div>
                 <label className="label">
                   <span className="label-text text-black font-bold text-lg">Food Name:</span>
@@ -119,7 +112,7 @@ const DonateForm = () => {
                   type="text"
                   name="foodName"
                   placeholder="Food Name"
-                  className="input"
+                  className="input  rounded-md"
                   value={formData.foodName}
                   onChange={handleChange}
                   required
@@ -134,20 +127,20 @@ const DonateForm = () => {
                   type="text"
                   name="pickupLocation"
                   placeholder="Pickup location"
-                  className="input"
+                  className="input rounded-md"
                   value={formData.pickupLocation}
                   onChange={handleChange}
                   required
                 />
               </div>
 
-              <div className="md:flex items-center justify-between grid grid-cols-1 gap-y-4">
+              <div className="md:flex items-center gap-x-4 grid grid-cols-1 gap-y-4">
                 <div>
                   <label className="label">
                     <span className="label-text text-black font-bold text-lg">Quantity:</span>
                   </label>
                   <select
-                    className="input border w-20"
+                    className="input border w-20 rounded-md"
                     name="quantity"
                     value={formData.quantity}
                     onChange={handleChange}
@@ -163,7 +156,7 @@ const DonateForm = () => {
                     <span className="label-text text-black font-bold text-lg">Food Type:</span>
                   </label>
                   <select
-                    className="input border w-28"
+                    className="input border w-32 rounded-md"
                     name="foodType"
                     value={formData.foodType}
                     onChange={handleChange}
@@ -190,7 +183,7 @@ const DonateForm = () => {
                     }}
                   />
                 ) : (
-                  <div className="bg-white w-40 h-40 text-center flex justify-center items-center">
+                  <div className="bg-white border border-black w-40 h-40 text-center flex justify-center items-center">
                     No image uploaded
                   </div>
                 )}
@@ -199,7 +192,7 @@ const DonateForm = () => {
                 <label className="label">
                   <span className="label-text text-black font-bold text-lg">Food Image:</span>
                 </label>
-                <input type="file" onChange={handleImageChange} />
+                <input type="file" onChange={handleImageChange} className="rounded-md" />
               </div>
             </div>
 
@@ -210,7 +203,7 @@ const DonateForm = () => {
               <input
                 type="date"
                 name="expiryDate"
-                className="input input-bordered"
+                className="input input-bordered rounded-md"
                 value={formData.expiryDate}
                 onChange={handleChange}
                 min={minDate}
@@ -225,7 +218,7 @@ const DonateForm = () => {
               <input
                 type="time"
                 name="pickupTime"
-                className="input input-bordered"
+                className="input input-bordered rounded-md"
                 value={formData.pickupTime}
                 onChange={handleChange}
                 required
@@ -241,7 +234,7 @@ const DonateForm = () => {
                   type="text"
                   name="note"
                   placeholder="Note (if any)"
-                  className="input"
+                  className="input rounded-md"
                   value={formData.note}
                   onChange={handleChange}
                 />
@@ -257,7 +250,7 @@ const DonateForm = () => {
                   type="tel"
                   name="phoneNo"
                   placeholder="10 digits"
-                  className="input"
+                  className="input rounded-md"
                   value={formData.phoneNo}
                   onChange={handleChange}
                 />
@@ -266,7 +259,7 @@ const DonateForm = () => {
           </div>
           <input
             type="submit"
-            className="w-full bg-[#ABD700] text-black font-semibold text-xl px-4 py-2 mb-2 rounded-xl hover:bg-[#9bc202] transition duration-300 cursor-pointer"
+            className="w-11/12 bg-[#ABD700] hover:text-white text-black font-semibold text-xl px-4 py-2 mb-2 rounded-xl hover:bg-black hover:scale-x-110 transition duration-300 cursor-pointer"
           />
         </form>
       </div>
