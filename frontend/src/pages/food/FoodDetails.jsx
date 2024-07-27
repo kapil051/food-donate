@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import axiosInstance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
-
+import veg from "../../assets/icons/veg.png";
+import nonveg from "../../assets/icons/nonveg.png";
 function FoodDetails() {
   const [foodDetails, setFoodDetails] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
@@ -27,7 +28,10 @@ function FoodDetails() {
           if (userResponse.status === 200) {
             setUserDetails(userResponse.data.user);
           } else {
-            console.error("Error fetching user details:", userResponse.data.msg);
+            console.error(
+              "Error fetching user details:",
+              userResponse.data.msg
+            );
           }
         } else {
           console.error("Error fetching food details:", foodResponse.data.msg);
@@ -62,10 +66,7 @@ function FoodDetails() {
     phoneNo,
   } = foodDetails;
 
-  const {
-    name: userName,
-    userImage
-  } = userDetails || {};
+  const { name: userName, userImage, email: userEmail } = userDetails || {};
 
   return (
     <div>
@@ -74,39 +75,52 @@ function FoodDetails() {
         <title>Food Details</title>
         <meta name="description" content="Food details page" />
       </Helmet>
-      <section className="dark:bg-gray-100">
+      <section className="bg-[#F5F5F5] pt-16">
         <div className="container flex flex-col-reverse mx-auto lg:flex-row">
           <div className="flex flex-col md:ml-24 md:mt-20 px-6 py-8 space-y-6 rounded-sm sm:p-8 lg:p-12 lg:w-1/2 xl:w-2/5 dark:bg-violet-600 dark:text-gray-50">
-            <h1 className="text-3xl">Food Details</h1>
+            <h1 className="text-3xl capitalize leading-tight ">
+              {" "}
+              {capitalizeFirstLetter(foodName)}
+            </h1>
             <div className="flex space-x-2 sm:space-x-4">
               <div className="space-y-2">
-                <p className="text-lg font-medium leading-snug">
-                  <span className="font-semibold">Food Name:</span> {capitalizeFirstLetter(foodName)}
+                <p className="leading-snug flex flex-row gap-x-2 items-center">
+                  <span className="font-semibold">Food Type:</span>{" "}
+                  {foodType === "nonveg" ? (
+                    <img src={nonveg} alt="Non-Veg" width="30" height="30" />
+                  ) : (
+                    <img src={veg} alt="Veg" width="30" height="30" />
+                  )}
                 </p>
                 <p className="leading-snug">
-                  <span className="font-semibold">Food Type:</span> {capitalizeFirstLetter(foodType)}
+                  <span className="font-semibold">Note:</span>{" "}
+                  {capitalizeFirstLetter(note)}
                 </p>
                 <p className="leading-snug">
-                  <span className="font-semibold">Note:</span> {capitalizeFirstLetter(note)}
+                  <span className="font-semibold">Quantity:</span>{" "}
+                  {quantity || "N/A"}
                 </p>
                 <p className="leading-snug">
-                  <span className="font-semibold">Quantity:</span> {quantity || "N/A"}
-                </p>
-                <p className="leading-snug">
-                  <span className="font-semibold">Expiration Date:</span> {expiryDate ? new Date(expiryDate).toLocaleDateString() : "N/A"}
+                  <span className="font-semibold">Expiration Date:</span>{" "}
+                  {expiryDate
+                    ? new Date(expiryDate).toLocaleDateString()
+                    : "N/A"}
                 </p>
               </div>
             </div>
             <div className="flex space-x-2 sm:space-x-4">
               <div className="space-y-2">
                 <p className="text-lg font-medium leading-snug">
-                  <span className="font-semibold">Phone No.:</span> {phoneNo || "N/A"}
+                  <span className="font-semibold">Donar Phone No.:</span>{" "}
+                  {phoneNo || "N/A"}
                 </p>
                 <p className="leading-snug">
-                  <span className="font-semibold">Pickup Time:</span> {pickupTime || "N/A"}
+                  <span className="font-semibold">Pickup Time:</span>{" "}
+                  {pickupTime || "N/A"}
                 </p>
                 <p className="leading-snug">
-                  <span className="font-semibold">Pickup Location:</span> {capitalizeFirstLetter(pickupLocation)}
+                  <span className="font-semibold">Pickup Location:</span>{" "}
+                  {capitalizeFirstLetter(pickupLocation)}
                 </p>
               </div>
             </div>
@@ -114,24 +128,18 @@ function FoodDetails() {
               <div className="flex space-x-2 sm:space-x-4">
                 <div className="space-y-2">
                   <p className="text-lg font-medium leading-snug">
-                    <span className="font-semibold">User Name:</span> {capitalizeFirstLetter(userName)}
+                    <span className="font-semibold">Donar Name:</span>{" "}
+                    {capitalizeFirstLetter(userName)}
                   </p>
-                  {userImage && (
-                    <img
-                      src={userImage}
-                      alt={userName || "User Image"}
-                      className="rounded-lg shadow-lg dark:bg-gray-500 aspect-video w-[100px] h-[100px]"
-                    />
-                  )}
+                  <p className="leading-snug">
+                    <span className="font-semibold">Donar Email Id:</span>{" "}
+                    {capitalizeFirstLetter(userEmail)}
+                  </p>
                 </div>
               </div>
             )}
-            <div className="flex space-x-2 sm:space-x-4">
-              <div className="space-y-2">
-                <label htmlFor="my_modal_6" className="btn">
-                  Request
-                </label>
-              </div>
+            <div className=" text-center bg-[#ABD700] text-black  font-semibold px-4 py-2 mb-2 rounded-md  hover:bg-[#353535] hover:scale-x-110 hover:text-white transition duration-300 ease-in-out cursor-pointer">
+              Request
             </div>
           </div>
           <div className="lg:w-1/2 xl:w-3/5 dark:bg-gray-100">
@@ -139,7 +147,7 @@ function FoodDetails() {
               <img
                 src={foodImage}
                 alt={foodName || "Food Image"}
-                className="rounded-lg shadow-lg dark:bg-gray-500 aspect-video w-[800px] min-h-svh"
+                className="rounded-lg shadow-lg dark:bg-gray-500 aspect-video w-[800px] min-h-svh transition duration-300 ease-in-out hover:scale-95"
               />
             </div>
           </div>
