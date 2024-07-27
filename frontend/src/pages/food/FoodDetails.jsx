@@ -4,6 +4,12 @@ import axiosInstance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import veg from "../../assets/icons/veg.png";
 import nonveg from "../../assets/icons/nonveg.png";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 function FoodDetails() {
   const [foodDetails, setFoodDetails] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
@@ -13,6 +19,33 @@ function FoodDetails() {
   const capitalizeFirstLetter = (string) => {
     if (!string) return "N/A";
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+  // dialog box
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // dialog box form
+  const initialFormState = {
+    requestQuantity: "1",
+    requestNote: "",
+    ngoNumber: "",
+    purpose: "individual",
+  };
+  const [formData, setFormData] = useState(initialFormState);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   useEffect(() => {
@@ -138,9 +171,77 @@ function FoodDetails() {
                 </div>
               </div>
             )}
-            <div className=" text-center bg-[#ABD700] text-black  font-semibold px-4 py-2 mb-2 rounded-md  hover:bg-[#353535] hover:scale-x-110 hover:text-white transition duration-300 ease-in-out cursor-pointer">
+            <div
+              className=" text-center bg-[#ABD700] text-black  font-semibold px-4 py-2 mb-2 rounded-md  hover:bg-[#353535] hover:scale-x-110 hover:text-white transition duration-300 ease-in-out cursor-pointer"
+              onClick={handleClickOpen}
+            >
               Request
             </div>
+            {/* dialog box */}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              PaperProps={{
+                component: "form",
+                onSubmit: (event) => {
+                  event.preventDefault();
+                  console.log(formData);
+                  // Todo: add send request function
+                  setFormData(initialFormState);
+                  handleClose();
+                },
+              }}
+            >
+              <DialogTitle>Request Details</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  To send food request to donor, please enter this details so
+                  that we can connect you.
+                </DialogContentText>
+                <input
+                  type="number"
+                  placeholder="Enter quantity of food"
+                  className="w-full py-2 my-4"
+                  name="requestQuantity"
+                  value={formData.requestQuantity}
+                  onChange={handleChange}
+                />
+                <select
+                  className="input border w-full my-4"
+                  name="purpose"
+                  placeholder="purpose"
+                  value={formData.purpose}
+                  onChange={handleChange}
+                >
+                  <option value="" disabled selected hidden>
+                    Purpose
+                  </option>
+                  <option value="indivual">Indivual</option>
+                  <option value="ngo">NGO</option>
+                  <option value="volunteer">Volunteer</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Valid NGO number (applicable only for ngo)"
+                  className="w-full py-2 my-4"
+                  name="ngoNumber"
+                  value={formData.ngoNumber}
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  placeholder="Note"
+                  className="w-full py-2 my-4"
+                  name="requestNote"
+                  value={formData.requestNote}
+                  onChange={handleChange}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button type="submit">Send</Button>
+              </DialogActions>
+            </Dialog>
           </div>
           <div className="lg:w-1/2 xl:w-3/5 dark:bg-gray-100">
             <div className="flex items-center justify-center p-4 md:p-8 lg:p-12">
