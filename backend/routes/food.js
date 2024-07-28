@@ -3,6 +3,7 @@ import { Foods, Users } from "../db.js";
 import zod from "zod";
 import authMiddleware from "../middleware.js";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer"
 
 dotenv.config();
 
@@ -91,34 +92,73 @@ router.post("/donate", authMiddleware, async (req, res) => {
 
 });
 
-router.post("/request/:foodId",authMiddleware,async(req,res)=>{
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.USER,
+        pass: process.env.PASS,
+    }
+});
 
-      try{
 
-                   const foodId=req.params.foodId;
-                 const food=await Foods.findById(foodId);  
+router.post("/request/:foodId", authMiddleware, async (req, res) => {
+    try {
+        
+        const foodId = req.params.foodId;
+        const food = await Foods.findById(foodId);
 
-                  const donor=await Users.findById(food.userId);
-                     const all_activity=donor.activities;
+        if (!food) {
+            return res.status(404).json({ msg: "Food not found" });
+        }
 
-                const idx = all_activity.findIndex(activity => activity.food._id.toString() === foodId);
+        const donor = await Users.findById(food.userId);
 
-                        all_activity[idx].isDelivered=true;
-           
-               return res.status(200).json({
-                       idx,
-                      donor,
-                    msg:"success"
-               })
+        if (!donor) {
+            return res.status(404).json({ msg: "Donor not found" });
+        }
 
-      }catch(e){
-            console.log(e.message);
-        return res.status(200).json({
-            msg:"error"
-        })
-      }
+        const donor_mail = donor.email;
+        console.log(donor_mail);
 
-})
+        const all_activity = donor.activities;
+        const idx = all_activity.findIndex(activity => activity.food._id.toString() === foodId);
+
+        if (idx === -1) {
+            return res.status(404).json({ msg: "Activity not found" });
+        }
+
+        const mailOptions = {
+            from: process.env.USER,
+            to: donor_mail,
+            subject: 'Food Pickup Notification',
+            text: 'Your food will be picked up today.'
+        };
+
+        transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+                    console.log(error);
+                return res.status(500).json({ msg: "Failed to send email" });
+            }else{
+                console.log('Email sent: ' + info.response);
+                all_activity[idx].isDelivered = true;
+                    await donor.save();
+    
+                return res.status(200).json({
+                    donor,
+                    msg: "successfully send mail to donor mail"
+                });
+
+            }
+          
+        });
+    } catch (e) {
+        console.log(e.message);
+        return res.status(500).json({
+            msg: "error"
+        });
+    }
+});
+
 
 router.get('/allfoods', async (req, res) => {
     try {
