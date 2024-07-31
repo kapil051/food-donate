@@ -37,7 +37,7 @@ const foodSchema = zod.object({
 
 router.post("/donate", authMiddleware, async (req, res) => {
     try {
-     
+
         if (req.body.expiryDate) {
             const expiryDate = new Date(req.body.expiryDate);
             expiryDate.setHours(23, 59, 59, 999);
@@ -51,7 +51,7 @@ router.post("/donate", authMiddleware, async (req, res) => {
         const userId = req.userId;
 
         const newFood = new Foods({
-                userId,
+            userId,
             ...validatedData,
         });
 
@@ -63,7 +63,7 @@ router.post("/donate", authMiddleware, async (req, res) => {
                 $push: {
                     activities: {
                         action: "donate",
-                        food:newFood,
+                        food: newFood,
                         timestamp: new Date(),
                     },
                 },
@@ -103,8 +103,10 @@ const transporter = nodemailer.createTransport({
 
 router.post("/request/:foodId", authMiddleware, async (req, res) => {
     try {
-        
+
         const foodId = req.params.foodId;
+        const { requestQuantity, requestNote, purpose, ngoNumber } = req.body;
+
         const food = await Foods.findById(foodId);
 
         if (!food) {
@@ -130,26 +132,34 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
         const mailOptions = {
             from: process.env.SENDER,
             to: donor_mail,
-            subject: 'Food Pickup Notification',
-            text: 'Your food will be picked up today.'
+            subject: 'Food Pickup Request Notification',
+            html: `
+            <h2>Food Pickup Request Details:</h2>
+            <p><strong>Food Name:</strong> ${food.foodName}</p>
+            <p><strong>Request Quantity:</strong> ${requestQuantity}</p>
+            <p><strong>Request Note:</strong> ${requestNote || 'N/A'}</p>
+            <p><strong>Purpose:</strong> ${purpose || 'N/A'}</p>
+            <p><strong>NGO Number:</strong> ${ngoNumber || 'N/A'}</p>
+            <p>Your food will be picked up today. Thank you for your generosity!</p>     
+            `,
         };
 
         transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {
-                    console.log(error);
+                console.log(error);
                 return res.status(500).json({ msg: "Failed to send email" });
-            }else{
+            } else {
                 console.log('Email sent: ' + info.response);
                 all_activity[idx].isDelivered = true;
-                    await donor.save();
-    
+                await donor.save();
+
                 return res.status(200).json({
                     donor,
                     msg: "successfully send mail to donor mail"
                 });
 
             }
-          
+
         });
     } catch (e) {
         console.log(e.message);
@@ -163,8 +173,8 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
 router.get('/allfoods', async (req, res) => {
     try {
         const today = new Date();
-        today.setHours(23, 58, 58, 999); 
-        const offset = 5.5 * 60 * 60 * 1000; 
+        today.setHours(23, 58, 58, 999);
+        const offset = 5.5 * 60 * 60 * 1000;
         const todayInIST = new Date(today.getTime() + offset);
 
         const foods = await Foods.find({ expiryDate: { $gte: todayInIST } });
@@ -179,7 +189,7 @@ router.get('/allfoods', async (req, res) => {
 
 router.get("/detail/:foodId", async (req, res) => {
     try {
-        const fid = req.params.foodId;  
+        const fid = req.params.foodId;
 
         const food = await Foods.findById(fid);
 
