@@ -10,6 +10,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Swal from "sweetalert2";
+
 function FoodDetails() {
   const [foodDetails, setFoodDetails] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
@@ -21,8 +23,8 @@ function FoodDetails() {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   };
 
-  // dialog box
-  const [open, setOpen] = React.useState(false);
+  // Dialog box
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,7 +34,7 @@ function FoodDetails() {
     setOpen(false);
   };
 
-  // dialog box form
+  // Dialog box form
   const initialFormState = {
     requestQuantity: "1",
     requestNote: "",
@@ -42,10 +44,38 @@ function FoodDetails() {
   const [formData, setFormData] = useState(initialFormState);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+  };
+
+  const sendRequest = async () => {
+    try {
+      const response = await axiosInstance.post(`/food/request/${id}`, formData);
+      if (response.status === 200) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Request Sent',
+          text: 'Your request has been sent successfully!',
+        });
+        setFormData(initialFormState);
+        handleClose();
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Request Failed',
+          text: 'Failed to send request. Please try again.',
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Request Failed',
+        text: 'Failed to send request. Please try again.',
+      });
+    }
   };
 
   useEffect(() => {
@@ -61,10 +91,7 @@ function FoodDetails() {
           if (userResponse.status === 200) {
             setUserDetails(userResponse.data.user);
           } else {
-            console.error(
-              "Error fetching user details:",
-              userResponse.data.msg
-            );
+            console.error("Error fetching user details:", userResponse.data.msg);
           }
         } else {
           console.error("Error fetching food details:", foodResponse.data.msg);
@@ -111,8 +138,7 @@ function FoodDetails() {
       <section className="bg-[#F5F5F5] pt-16">
         <div className="container flex flex-col-reverse mx-auto lg:flex-row">
           <div className="flex flex-col md:ml-24 md:mt-20 px-6 py-8 space-y-6 rounded-sm sm:p-8 lg:p-12 lg:w-1/2 xl:w-2/5 dark:bg-violet-600 dark:text-gray-50">
-            <h1 className="text-3xl capitalize leading-tight ">
-              {" "}
+            <h1 className="text-3xl capitalize leading-tight">
               {capitalizeFirstLetter(foodName)}
             </h1>
             <div className="flex space-x-2 sm:space-x-4">
@@ -172,12 +198,12 @@ function FoodDetails() {
               </div>
             )}
             <div
-              className=" text-center bg-[#ABD700] text-black  font-semibold px-4 py-2 mb-2 rounded-md  hover:bg-[#353535] hover:scale-x-110 hover:text-white transition duration-300 ease-in-out cursor-pointer"
+              className="text-center bg-[#ABD700] text-black font-semibold px-4 py-2 mb-2 rounded-md hover:bg-[#353535] hover:scale-x-110 hover:text-white transition duration-300 ease-in-out cursor-pointer"
               onClick={handleClickOpen}
             >
               Request
             </div>
-            {/* dialog box */}
+            {/* Dialog box */}
             <Dialog
               open={open}
               onClose={handleClose}
@@ -185,18 +211,14 @@ function FoodDetails() {
                 component: "form",
                 onSubmit: (event) => {
                   event.preventDefault();
-                  console.log(formData);
-                  // Todo: add send request function
-                  setFormData(initialFormState);
-                  handleClose();
+                  sendRequest();
                 },
               }}
             >
               <DialogTitle>Request Details</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  To send food request to donor, please enter this details so
-                  that we can connect you.
+                  To send a food request to the donor, please enter these details so that we can connect you.
                 </DialogContentText>
                 <input
                   type="number"
@@ -209,20 +231,19 @@ function FoodDetails() {
                 <select
                   className="input border w-full my-4"
                   name="purpose"
-                  placeholder="purpose"
                   value={formData.purpose}
                   onChange={handleChange}
                 >
-                  <option value="" disabled selected hidden>
+                  <option value="" disabled hidden>
                     Purpose
                   </option>
-                  <option value="indivual">Indivual</option>
+                  <option value="individual">Individual</option>
                   <option value="ngo">NGO</option>
                   <option value="volunteer">Volunteer</option>
                 </select>
                 <input
                   type="text"
-                  placeholder="Valid NGO number (applicable only for ngo)"
+                  placeholder="Valid NGO number (applicable only for NGO)"
                   className="w-full py-2 my-4"
                   name="ngoNumber"
                   value={formData.ngoNumber}
