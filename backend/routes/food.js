@@ -95,7 +95,7 @@ router.post("/donate", authMiddleware, async (req, res) => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.USER,
+        user: process.env.SENDER,
         pass: process.env.PASS,
     }
 });
@@ -128,7 +128,7 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
         }
 
         const mailOptions = {
-            from: process.env.USER,
+            from: process.env.SENDER,
             to: donor_mail,
             subject: 'Food Pickup Notification',
             text: 'Your food will be picked up today.'
