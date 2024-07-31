@@ -93,13 +93,13 @@ const DonateForm = () => {
   })
   return (
     <div
-      className=" bg-[#F5F5F5] flex  flex-col items-center pt-20 pb-16">
+      className=" bg-[#F5F5F5]  flex  flex-col items-center pt-20 pb-16"style={{backgroundImage: 'url(https://media.istockphoto.com/id/515373062/vector/food-seamless-background.jpg?s=612x612&w=0&k=20&c=hexa_lBms2zsFxEHASUeYhNu17i8JfV3TGOoDark-tk=)'}}>
       <Helmet>
         <html lang="en" />
         <title>Donate</title>
         <meta name="description" content="Donate food form" />
       </Helmet>
-      <div className="card bg-white  shadow-lg px-6 py-16 mb-5 mt-5 w-10/12 flex flex-col items-center justify-center">
+      <div className="card bg-white bg-opacity-90 shadow-lg px-6 py-16 mb-5 mt-5 w-9/12 flex flex-col items-center justify-center" >
        <div className=" md:text-4xl text-2xl text-center font-bold pb-10">Fill the form correctly !!</div>
         <form onSubmit={handleFoodData} className="flex flex-col w-11/12 items-center gap-y-10">
           <div className=" grid md:grid-cols-2 grid-cols-1 gap-y-10  gap-x-40 w-10/12 place-content-center place-items-stretch">
