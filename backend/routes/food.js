@@ -1,4 +1,4 @@
-import express from "express";
+import express, { request } from "express";
 import { Foods, Users } from "../db.js";
 import zod from "zod";
 import authMiddleware from "../middleware.js";
@@ -51,7 +51,7 @@ router.post("/donate", authMiddleware, async (req, res) => {
         const userId = req.userId;
 
         const newFood = new Foods({
-            userId,
+               userId,
             ...validatedData,
         });
 
@@ -62,9 +62,9 @@ router.post("/donate", authMiddleware, async (req, res) => {
             {
                 $push: {
                     activities: {
-                        action: "donate",
-                        food: newFood,
-                        timestamp: new Date(),
+                              action: "active",
+                             foodId:newFood._id,
+                             timestamp: new Date(),
                     },
                 },
             },
@@ -100,34 +100,24 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
 router.post("/request/:foodId", authMiddleware, async (req, res) => {
-    try {
 
+    try {
         const foodId = req.params.foodId;
         const { requestQuantity, requestNote, purpose, ngoNumber } = req.body;
 
         const food = await Foods.findById(foodId);
-
         if (!food) {
             return res.status(404).json({ msg: "Food not found" });
         }
 
         const donor = await Users.findById(food.userId);
-
         if (!donor) {
             return res.status(404).json({ msg: "Donor not found" });
         }
 
         const donor_mail = donor.email;
-        console.log(donor_mail);
-
-        const all_activity = donor.activities;
-        const idx = all_activity.findIndex(activity => activity.food._id.toString() === foodId);
-
-        if (idx === -1) {
-            return res.status(404).json({ msg: "Activity not found" });
-        }
+        const userId = req.userId;
 
         const mailOptions = {
             from: process.env.SENDER,
@@ -140,7 +130,8 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
             <p><strong>Request Note:</strong> ${requestNote || 'N/A'}</p>
             <p><strong>Purpose:</strong> ${purpose || 'N/A'}</p>
             <p><strong>NGO Number:</strong> ${ngoNumber || 'N/A'}</p>
-            <p>Your food will be picked up today. Thank you for your generosity!</p>     
+            <p>Your food will be picked up today. Thank you for your generosity!</p>  
+            <p>Please confirm you are ready to deliver the food from the website!</p>
             `,
         };
 
@@ -150,24 +141,82 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
                 return res.status(500).json({ msg: "Failed to send email" });
             } else {
                 console.log('Email sent: ' + info.response);
-                all_activity[idx].isDelivered = true;
-                await donor.save();
 
-                return res.status(200).json({
-                    donor,
-                    msg: "successfully send mail to donor mail"
+                // Check if the user already has a requested activity for the same food
+                const user = await Users.findById(userId);
+                const existingActivity = user.activities.find(activity => 
+                    activity.foodId.toString() === foodId && activity.action === 'requested'
+                );
+
+                if (existingActivity) {
+                    return res.status(400).json({ msg: "You have already requested this food" });
+                }
+
+                // Add the new requested activity
+                user.activities.push({
+                    action: "requested",
+                      foodId,
+                    timestamp: new Date(),
                 });
 
-            }
+                await user.save();
 
+                return res.status(200).json({
+                    getter: user,
+                    donor,
+                    msg: "Successfully sent mail to donor"
+                });
+            }
         });
     } catch (e) {
         console.log(e.message);
         return res.status(500).json({
-            msg: "error"
+            msg: "An error occurred"
         });
     }
 });
+
+
+router.post("/confirm/:foodId", authMiddleware, async (req, res) => {
+    try {
+          const getterMail = req.body.mail;
+
+        const getter = await Users.findOne({ email: getterMail });
+
+        if (!getter) {
+            return res.status(404).json({ message: 'Getter not found' });
+        }
+
+        const getterId = getter._id;
+        const donorId = req.userId;
+        const foodId = req.params.foodId;
+
+        // Update donor's activity to delivered
+        await Users.updateOne(
+            { _id: donorId, 'activities.foodId': foodId },
+            { $set: { 'activities.$.action': 'delivered' } }
+        );
+
+        // Update getter's activity to confirmed
+        await Users.updateOne(
+            { _id: getterId, 'activities.foodId': foodId },
+            { $set: { 'activities.$.action': 'confirmed' } }
+        );
+
+            const donor=await Users.findById(donorId);
+            const newGetter=await Users.findById(getterId);
+    
+        res.status(200).json({ 
+            message:  'Activity status updated successfully',
+                      donor,
+                  "getter":newGetter,
+         });
+    } catch (error) {
+        console.error("Error while updating activity status", error);
+        res.status(500).json({ message: 'An error occurred while updating activity status' });
+    }
+});
+
 
 
 router.get('/allfoods', async (req, res) => {

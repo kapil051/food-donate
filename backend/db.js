@@ -19,14 +19,10 @@ const activitySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    food:{
-        type:Object,
-        default:{},
-        required:true,
-    },
-    isDelivered:{
-        type:Boolean,
-        default:false,
+    foodId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Foods',
+        required: true,
     },
     timestamp: {
         type: Date,
@@ -93,6 +89,18 @@ const foodSchema = new mongoose.Schema({
     phoneNo: {
         type: String,
         required: true,
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
+    isRequested: {
+        type: Boolean,
+        default: false,
+    },
+    isDelivered: {
+        type: Boolean,
+        default: false,
     },
     note: String,
     foodImage: String,
