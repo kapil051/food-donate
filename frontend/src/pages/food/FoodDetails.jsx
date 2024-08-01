@@ -59,6 +59,8 @@ function FoodDetails() {
           icon: 'success',
           title: 'Request Sent',
           text: 'Your request has been sent successfully!',
+          color:"green",
+          confirmButtonColor: 'green',
         });
         setFormData(initialFormState);
         handleClose();
@@ -67,14 +69,20 @@ function FoodDetails() {
           icon: 'error',
           title: 'Request Failed',
           text: 'Failed to send request. Please try again.',
+          color:"red",
+          confirmButtonColor: 'red',
         });
+        handleClose();
       }
     } catch (error) {
       Swal.fire({
         icon: 'error',
         title: 'Request Failed',
         text: 'Failed to send request. Please try again.',
+        color:"red",
+        confirmButtonColor: 'red',
       });
+      handleClose();
     }
   };
 
@@ -137,7 +145,7 @@ function FoodDetails() {
       </Helmet>
       <section className="bg-[#F5F5F5] pt-16">
         <div className="container flex flex-col-reverse mx-auto lg:flex-row">
-          <div className="flex flex-col md:ml-24 md:mt-20 px-6 py-8 space-y-6 rounded-sm sm:p-8 lg:p-12 lg:w-1/2 xl:w-2/5 dark:bg-violet-600 dark:text-gray-50">
+          <div className="flex flex-col md:ml-24 md:mt-20 px-6 py-8 space-y-6 rounded-sm sm:p-8 lg:p-12 lg:w-1/2 xl:w-2/5  ">
             <h1 className="text-3xl capitalize leading-tight">
               {capitalizeFirstLetter(foodName)}
             </h1>

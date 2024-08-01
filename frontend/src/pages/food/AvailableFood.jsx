@@ -149,14 +149,14 @@ function AvailableFood() {
                 <meta name="description" content="Available food items" />
             </Helmet>
             <div className="space-y-3 mb-10">
-                <h5 className="text-xl text-center font-mono mt-14">
+                <h5 className="text-xl text-center font-mono mt-12">
                     Let's Take Care of Each Other
                 </h5>
-                <h1 className="text-5xl font-medium text-center py-10">
+                <h1 className="text-5xl font-medium text-center py-1">
                     Enjoy & Eat <span className="text-[#ABD700]">Together</span>
                 </h1>
             </div>
-            <div className="flex justify-center mb-10">
+            <div className="flex justify-center">
                 <div className="md:w-96 w-72">
                     <label className="flex items-center gap-2">
                         <input
@@ -169,8 +169,8 @@ function AvailableFood() {
                     </label>
                 </div>
             </div>
-            <div className="text-center flex flex-col items-center py-10">
-                <div className="grid md:grid-cols-3 grid-cols-1 w-10/12 py-10">
+            <div className="text-center flex flex-col items-center ">
+                <div className="grid md:grid-cols-3 grid-cols-1 w-10/12 py-8">
                     <Dropdown
                         options={dateOptions}
                         onChange={handleFilterChange('date')}
