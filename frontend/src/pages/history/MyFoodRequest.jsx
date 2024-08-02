@@ -1,9 +1,14 @@
-import React from "react";
-import { history } from "../../utils/data/MyFoodRequest";
+import React,{useContext,useState,useEffect} from "react";
 import Lottie from "react-lottie";
 import image from "../../assets/lottie/task.json";
-import { motion } from "framer-motion";
+import Card from "../../components/MyFoodRequest/Card"
+import axiosInstance from "../../utils/axiosInstance";
+import { AuthContext } from '../../context/AuthContext';
 function MyFoodRequest() {
+
+  const { user} = useContext(AuthContext);
+  const [history,setHistory]=useState([])
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -12,45 +17,22 @@ function MyFoodRequest() {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-  const color = {
-    failed: "#EB6B6B",
-    success: "#ABD700",
-    processing: "#F7BD2E",
-  };
+ 
+
+  const handleData=async()=>{
+    const res=await axiosInstance.get(`/user/${user.id}`)
+    setHistory(res.data.user.activities.filter(item => item.action=== 'requested' || item.action === 'confirmed'));
+    console.log("history",history)
+  }
+  useEffect(()=>{
+    handleData();
+  },[])
   return (
-    <div className="bg-[#F5F5F5] pt-16 flex flex-col items-center gap-y-14 pb-20">
+    <div className="bg-[#F5F5F5] pt-8 flex flex-col items-center gap-y-14 pb-20">
       <Lottie options={defaultOptions} height={400} width={400} />
+      <div className="font-semibold text-2xl -mt-20 -mb-4">Requested Food History</div>
       {history.map((item) => (
-        <motion.div
-          className="w-11/12 flex flex-row justify-between items-center bg-[#E5E5E5] rounded-md py-4 px-4"
-          initial={{ opacity: 0, scale: 0.8, y: 50 }}
-          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{
-            duration: 0.8,
-            delay: 0,
-            ease: [0, 0.71, 0.2, 1.01],
-          }}
-        >
-          <div className="flex flex-col gap-y-8">
-            <div className="font-bold text-xl  ">
-              Food Name :{" "}
-              <span className="font-semibold text-black">{item.foodName}</span>
-            </div>
-            <div>
-              Requested date : <span>{item.requestedDate}</span>
-            </div>
-            <div>
-              Donar Name : <span>{item.donarName}</span>
-            </div>
-          </div>
-          <div
-            className={`bg-[${
-              color[item.status]
-            }] px-4 py-2 rounded-md font-medium capitalize`}
-          >
-            {item.status}
-          </div>
-        </motion.div>
+        <Card userDetails={item}/>
       ))}
     </div>
   );

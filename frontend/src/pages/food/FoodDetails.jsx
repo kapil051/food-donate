@@ -200,7 +200,7 @@ function FoodDetails() {
                   </p>
                   <p className="leading-snug">
                     <span className="font-semibold">Donar Email Id:</span>{" "}
-                    {capitalizeFirstLetter(userEmail)}
+                    {userEmail}
                   </p>
                 </div>
               </div>
