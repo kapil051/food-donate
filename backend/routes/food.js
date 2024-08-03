@@ -179,7 +179,7 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
 
 router.post("/confirm/:foodId", authMiddleware, async (req, res) => {
     try {
-          const getterMail = req.body.mail;
+          const getterMail = req.body.getterEmail;
 
         const getter = await Users.findOne({ email: getterMail });
 
