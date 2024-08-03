@@ -8,9 +8,13 @@ function Card(props) {
   const [donarName,setDonarName] = useState("");
   const color = {
     failed: "#EB6B6B",
-    success: "#ABD700",
-    processing: "#F7BD2E",
+    confirmed: "#ABD700",
+    requested: "#BA75DA",
   };
+  const text={
+     confirmed:"Confirmed",
+     requested:"Requested",
+  }
   const handleFood=async()=>{
     const foodId=await axiosInstance.get(`/food/detail/${item.foodId}`)
     setFoodName(foodId.data.food.foodName)
@@ -36,7 +40,7 @@ function Card(props) {
       <div className="flex flex-col gap-y-8">
         <div className="font-bold text-xl  ">
           Food Name :{" "}
-          <span className="font-semibold text-black">{foodName}</span>
+          <span className="font-semibold text-black capitalize">{foodName}</span>
         </div>
         <div>
           Requested date : <span>{item.timestamp.substr(0,10)}</span>
@@ -47,10 +51,10 @@ function Card(props) {
       </div>
       <div
         className={`bg-[${
-          color[item.status]
+          color[item.action]
         }] px-4 py-2 rounded-md font-medium capitalize`}
       >
-        {item.status}
+        {text[item.action]}
       </div>
     </motion.div>
   );
