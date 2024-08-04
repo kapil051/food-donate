@@ -100,82 +100,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// router.post("/request/:foodId", authMiddleware, async (req, res) => {
-
-//     try {
-//         const foodId = req.params.foodId;
-//         const { requestQuantity, requestNote, purpose, ngoNumber } = req.body;
-
-//         const food = await Foods.findById(foodId);
-//         if (!food) {
-//             return res.status(404).json({ msg: "Food not found" });
-//         }
-
-//         const donor = await Users.findById(food.userId);
-//         if (!donor) {
-//             return res.status(404).json({ msg: "Donor not found" });
-//         }
-
-//         const donor_mail = donor.email;
-//         const userId = req.userId;
-
-//         const mailOptions = {
-//             from: process.env.SENDER,
-//             to: donor_mail,
-//             subject: 'Food Pickup Request Notification',
-//             html: `
-//             <h2>Food Pickup Request Details:</h2>
-//             <p><strong>Food Name:</strong> ${food.foodName}</p>
-//             <p><strong>Request Quantity:</strong> ${requestQuantity}</p>
-//             <p><strong>Request Note:</strong> ${requestNote || 'N/A'}</p>
-//             <p><strong>Purpose:</strong> ${purpose || 'N/A'}</p>
-//             <p><strong>NGO Number:</strong> ${ngoNumber || 'N/A'}</p>
-//             <p>Your food will be picked up today. Thank you for your generosity!</p>  
-//             <p>Please confirm you are ready to deliver the food from the website!</p>
-//             `,
-//         };
-
-//         transporter.sendMail(mailOptions, async (error, info) => {
-//             if (error) {
-//                 console.log(error);
-//                 return res.status(500).json({ msg: "Failed to send email" });
-//             } else {
-//                 console.log('Email sent: ' + info.response);
-
-//                 // Check if the user already has a requested activity for the same food
-//                 const user = await Users.findById(userId);
-//                 const existingActivity = user.activities.find(activity => 
-//                     activity.foodId.toString() === foodId && activity.action === 'requested'
-//                 );
-
-//                 if (existingActivity) {
-//                     return res.status(400).json({ msg: "You have already requested this food" });
-//                 }
-
-//                 // Add the new requested activity
-//                 user.activities.push({
-//                     action: "requested",
-//                       foodId,
-//                     timestamp: new Date(),
-//                 });
-
-//                 await user.save();
-
-//                 return res.status(200).json({
-//                     getter: user,
-//                     donor,
-//                     msg: "Successfully sent mail to donor"
-//                 });
-//             }
-//         });
-//     } catch (e) {
-//         console.log(e.message);
-//         return res.status(500).json({
-//             msg: "An error occurred"
-//         });
-//     }
-// });
-
 router.post("/request/:foodId", authMiddleware, async (req, res) => {
     try {
         const foodId = req.params.foodId;
@@ -298,7 +222,7 @@ router.post("/confirm/:foodId", authMiddleware, async (req, res) => {
             to: getterMail,
             subject: 'Food confirmation Notification',
             html: `
-            <p>Iam ready to donate my food</p>`,
+            <p>I am ready to donate my food</p>`,
         };
 
         transporter.sendMail(mailOptions, async (error, info) => {
@@ -313,7 +237,7 @@ router.post("/confirm/:foodId", authMiddleware, async (req, res) => {
 
                 res.status(200).json({
                     message: 'Activity status updated successfully',
-                    donor,
+                      donor,
                     "getter": newGetter,
                 });
 
@@ -335,7 +259,7 @@ router.get('/allfoods', async (req, res) => {
         const offset = 5.5 * 60 * 60 * 1000;
         const todayInIST = new Date(today.getTime() + offset);
 
-        const foods = await Foods.find({ expiryDate: { $gte: todayInIST } });
+        const foods = await Foods.find({ expiryDate: { $gte: todayInIST },  isActive: true });
         return res.status(200).json(foods);
     } catch (error) {
         console.error("error: ", error);
