@@ -84,7 +84,8 @@ function Card(props) {
   };
   const handleFood = async () => {
     const foodId = await axiosInstance.get(`/food/detail/${item.foodId}`);
-    setFoodName(foodId.data.food.foodName);
+    console.log(foodId)
+    setFoodName(foodId.data.data.foodName);
   };
   useEffect(() => {
     handleFood();
