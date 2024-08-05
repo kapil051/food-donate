@@ -7,6 +7,7 @@ import "react-dropdown/style.css";
 import axiosInstance from "../../utils/axiosInstance";
 import animationData from "../../assets/lottie/Animation - 1715537156636.json";
 import noavailable from "../../assets/lottie/navailable1.json";
+import Swal from "sweetalert2";
 
 function AvailableFood() {
     const [foods, setFoods] = useState([]);
@@ -46,6 +47,8 @@ function AvailableFood() {
     };
 
     const extractOptions = (data) => {
+        if (!Array.isArray(data)) return;
+
         const foodTypeSet = new Set();
         const locationSet = new Set();
 
@@ -72,6 +75,8 @@ function AvailableFood() {
     };
 
     const applyFiltersAndSort = (data) => {
+        if (!Array.isArray(data)) return [];
+
         let filteredData = [...data];
 
         if (filters.search) {
@@ -113,7 +118,7 @@ function AvailableFood() {
         try {
             const res = await axiosInstance.get("/food/allfoods");
             if (res.status === 200) {
-                const fetchedFoods = res.data;
+                const fetchedFoods = res.data.data;
                 setFoods(fetchedFoods);
                 setSearch(applyFiltersAndSort(fetchedFoods));
                 setAvailable(fetchedFoods.length > 0);
@@ -122,7 +127,13 @@ function AvailableFood() {
                 setAvailable(false);
             }
         } catch (error) {
-            console.error("Error fetching food data", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to fetch food data. Please try again later.',
+                color: "red",
+                confirmButtonColor: 'red',
+            });
             setAvailable(false);
         } finally {
             setLoader(false);

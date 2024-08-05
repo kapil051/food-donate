@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import axiosInstance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
+import { RiLoader2Fill } from "react-icons/ri";
 import veg from "../../assets/icons/veg.png";
 import nonveg from "../../assets/icons/nonveg.png";
 import Button from "@mui/material/Button";
@@ -53,36 +54,34 @@ function FoodDetails() {
 
   const sendRequest = async () => {
     try {
+      setLoading(true)
       const response = await axiosInstance.post(`/food/request/${id}`, formData);
-      if (response.status === 200) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Request Sent',
-          text: 'Your request has been sent successfully!',
-          color:"green",
-          confirmButtonColor: 'green',
-        });
+      const { success, msg } = response.data;
+
+      Swal.fire({
+        icon: success ? 'success' : 'error',
+        title: success ? 'Request Sent' : 'Request Failed',
+        text: msg,
+        color: success ? "green" : "red",
+        confirmButtonColor: success ? 'green' : 'red',
+      });
+
+      if (success) {
         setFormData(initialFormState);
-        handleClose();
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Request Failed',
-          text: 'Failed to send request. Please try again.',
-          color:"red",
-          confirmButtonColor: 'red',
-        });
         handleClose();
       }
     } catch (error) {
       Swal.fire({
         icon: 'error',
         title: 'Request Failed',
-        text: 'Failed to send request. Please try again.',
-        color:"red",
+        text: error.response ? error.response.data.msg : 'Failed to send request. Please try again.',
+        color: "red",
         confirmButtonColor: 'red',
       });
       handleClose();
+    }
+    finally {
+      setLoading(false)
     }
   };
 
@@ -90,22 +89,42 @@ function FoodDetails() {
     const fetchFoodAndUserDetails = async () => {
       try {
         const foodResponse = await axiosInstance.get(`/food/detail/${id}`);
-        if (foodResponse.status === 200) {
-          const foodData = foodResponse.data.food;
-          setFoodDetails(foodData);
+        const { success, data, msg } = foodResponse.data;
+        if (success) {
+          setFoodDetails(data);
 
-          const userId = foodData.userId;
+          const userId = data.userId;
           const userResponse = await axiosInstance.get(`/user/${userId}`);
-          if (userResponse.status === 200) {
-            setUserDetails(userResponse.data.user);
+          const userResult = userResponse.data;
+
+          if (userResult.success) {
+            setUserDetails(userResult.user);
           } else {
-            console.error("Error fetching user details:", userResponse.data.msg);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: userResult.msg || 'Failed to fetch user details.',
+              color: "red",
+              confirmButtonColor: 'red',
+            });
           }
         } else {
-          console.error("Error fetching food details:", foodResponse.data.msg);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: msg || 'Failed to fetch food details.',
+            color: "red",
+            confirmButtonColor: 'red',
+          });
         }
       } catch (error) {
-        console.error("Error fetching food and user details:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred while fetching food and user details.',
+          color: "red",
+          confirmButtonColor: 'red',
+        });
       } finally {
         setLoading(false);
       }
@@ -113,9 +132,12 @@ function FoodDetails() {
 
     fetchFoodAndUserDetails();
   }, [id]);
-
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <RiLoader2Fill className="animate-spin h-12 w-12 text-blue-600" />
+      </div>
+    );
   }
 
   if (!foodDetails) {
@@ -134,7 +156,7 @@ function FoodDetails() {
     phoneNo,
   } = foodDetails;
 
-  const { name: userName, userImage, email: userEmail } = userDetails || {};
+  const { name: userName, email: userEmail } = userDetails || {};
 
   return (
     <div>
@@ -252,15 +274,14 @@ function FoodDetails() {
                 <input
                   type="text"
                   placeholder="Valid NGO number (applicable only for NGO)"
-                  className="w-full py-2 my-4"
+                  className="w-full py-2 my-4 border border-gray-300 rounded"
                   name="ngoNumber"
                   value={formData.ngoNumber}
                   onChange={handleChange}
                 />
-                <input
-                  type="text"
-                  placeholder="Note"
-                  className="w-full py-2 my-4"
+                <textarea
+                  placeholder="Write a note (optional)"
+                  className="w-full py-2 my-4 border border-gray-300 rounded"
                   name="requestNote"
                   value={formData.requestNote}
                   onChange={handleChange}
