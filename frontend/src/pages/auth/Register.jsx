@@ -98,7 +98,7 @@ const SignupPage = () => {
     <div className="flex min-h-screen bg-[#F5F5F5] pt-16">
       <div className="flex flex-1 items-center justify-center p-6 py-16">
         <div className="max-w-md w-full">
-          <h2 className="text-4xl font-bold mb-6 text-center text-[#353535] leading-tight">
+          <h2 className="text-2xl font-bold mb-6 text-center text-[#353535] leading-tight">
             Fill your details correctly!
           </h2>
 

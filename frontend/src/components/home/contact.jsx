@@ -68,8 +68,8 @@ const Contact = () => {
           <h2 className="text-4xl font-bold leading-tight lg:text-5xl">
             Contact Us
           </h2>
-          <div className="dark:text-gray-600 py-4">
-            Contact now if you need to know anything regarding about our
+          <div className="dark:text-gray-600 py-4 ml-1">
+             Contact now if you need to know anything regarding about our
             service.
           </div>
         </div>

@@ -47,7 +47,7 @@ const Login = () => {
     <div className="flex min-h-screen bg-[#F5F5F5] pt-16">
       <div className="flex flex-1 items-center justify-center p-6 py-16">
         <div className="max-w-md w-full">
-          <h2 className="text-4xl font-bold mb-6 text-center  leading-tight">Welcome Back!</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center  leading-tight">Welcome Back!</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
