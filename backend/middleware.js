@@ -12,7 +12,7 @@ const authMiddleware = (req, res, next) => {
     if (!authHeader || !authHeader.startsWith('Bearer')) {
         return res.status(401).json({
             success: false,
-            message: "Authorization header is missing or malformed.",
+            msg: "Authorization header is missing or malformed.",
         });
     }
 
@@ -28,14 +28,14 @@ const authMiddleware = (req, res, next) => {
         } else {
             return res.status(403).json({
                 success: false,
-                message: "Invalid token: userId is missing.",
+                msg: "Invalid token: userId is missing.",
             });
         }
 
     } catch (error) {
         return res.status(403).json({
             success: false,
-            message: "Token verification failed.",
+            msg: "Token verification failed.",
             error: error.message,
         });
     }
