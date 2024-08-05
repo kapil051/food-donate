@@ -74,8 +74,8 @@ function Card(props) {
     } catch (error) {
       Swal.fire({
         icon: 'error',
-        title: 'Request Failed',
-        text: 'Failed to send request. Please try again.',
+        title: 'Confirmation Failed',
+        text: 'Failed to confirm request. Please try again.',
         color:"red",
         confirmButtonColor: 'red',
       });

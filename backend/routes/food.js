@@ -129,7 +129,7 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
         const mailOptions = {
             from: process.env.SENDER,
             to: donor_mail,
-            subject: 'Food Pickup Request Notification',
+            subject: 'Food Pickup Request Notification (Blessed Basket)',
             html: `
             <h1>Getter Email ${userMail}</h1>
             <h2>Food Pickup Request Details:</h2>
@@ -140,6 +140,8 @@ router.post("/request/:foodId", authMiddleware, async (req, res) => {
             <p><strong>NGO Number:</strong> ${ngoNumber || 'N/A'}</p>
             <p>Your food will be picked up today. Thank you for your generosity!</p>  
             <p>Please confirm you are ready to deliver the food from the website!</p>
+            <p>Sincerely,</p>
+            <p>Blessed Baskets</p>
             `,
         };
 
@@ -220,9 +222,12 @@ router.post("/confirm/:foodId", authMiddleware, async (req, res) => {
         const mailOptions = {
             from: process.env.SENDER,
             to: getterMail,
-            subject: 'Food confirmation Notification',
+            subject: 'Food confirmation Notification (Blessed Baskets)',
             html: `
-            <p>I am ready to donate my food</p>`,
+            <p>I am ready to donate my food</p>
+            <p>Sincerely,</p>
+            <p>Blessed Baskets</p>
+            `,
         };
 
         transporter.sendMail(mailOptions, async (error, info) => {

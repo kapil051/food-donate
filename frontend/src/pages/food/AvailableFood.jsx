@@ -205,7 +205,7 @@ function AvailableFood() {
             ) : (
                 <div className="flex flex-col justify-center">
                     <Lottie options={defaultAvailability} height={400} width={400} />
-                    <div className="text-5xl font-medium text-center">
+                    <div className="text-2xl font-medium text-center">
                         Sorry, No available food !!
                     </div>
                 </div>
