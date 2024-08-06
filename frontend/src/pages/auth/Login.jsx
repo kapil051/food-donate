@@ -27,7 +27,6 @@ const Login = () => {
       ...formData,
       [name]: value
     });
-    console.log(formData)
     setError("");
   };
 
@@ -39,7 +38,7 @@ const Login = () => {
       await login({ email: formData.email, password: formData.password });
     } catch (error) {
       setError(error.response?.data?.msg || 'Login failed. Please check your credentials.');
-      console.error("Login error:", error);
+      // console.error("Login error:", error);
     }
   };
 

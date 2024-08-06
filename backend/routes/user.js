@@ -18,27 +18,23 @@ const signupBody = zod.object({
     password: zod.string(),
 })
 
-
 router.post("/signup", async (req, res) => {
     try {
-        const { success } = signupBody.safeParse(req.body);
-        if (!success) {
+        const parseResult = signupBody.safeParse(req.body);
+        if (!parseResult.success) {
             return res.status(400).json({
-                msg: "incorrect inputs",
+                success: false,
+                msg: "Incorrect inputs",
                 errors: parseResult.error.errors,
-            })
+            });
         }
 
-        const existingUser = await Users.findOne({
-            email: req.body.email
-        })
-
+        const existingUser = await Users.findOne({ email: req.body.email });
         if (existingUser) {
-            return res.status(400).json({ msg: "User already exists" });
+            return res.status(400).json({ success: false, msg: "User already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
         const user = await Users.create({
             name: req.body.name,
             email: req.body.email,
@@ -46,11 +42,12 @@ router.post("/signup", async (req, res) => {
             contact: req.body.contact,
             address: req.body.address,
             password: hashedPassword,
-        })
+        });
 
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '3d' });
 
         return res.status(201).json({
+            success: true,
             msg: "User created successfully",
             user: {
                 id: user._id,
@@ -63,8 +60,8 @@ router.post("/signup", async (req, res) => {
             token,
         });
     } catch (error) {
-        console.error("Error during signup:", error);
-        return res.status(500).json({ msg: "Error during signup" });
+        // console.error("Error during signup:", error);
+        return res.status(500).json({ success: false, msg: "Error during signup" });
     }
 });
 
@@ -75,22 +72,20 @@ const signinBody = zod.object({
 
 router.post("/signin", async (req, res) => {
     try {
-       // console.log(req.body)
-        const { success } = signinBody.safeParse(req.body);
-        //console.log(success);
-        if (!success) {
-            return res.status(400).json({ msg: "Invalid input fields" });
+        const parseResult = signinBody.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ success: false, msg: "Invalid input fields" });
         }
 
         const user = await Users.findOne({ email: req.body.email });
         if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-            return res.status(400).json({ msg: "Incorrect email or password" });
+            return res.status(400).json({ success: false, msg: "Incorrect email or password" });
         }
 
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '3d' });
 
-
         return res.status(200).json({
+            success: true,
             msg: "User logged in successfully",
             user: {
                 id: user._id,
@@ -104,18 +99,18 @@ router.post("/signin", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error during signin:", error);
-        return res.status(500).json({ msg: "Error during signin" });
+        // console.error("Error during signin:", error);
+        return res.status(500).json({ success: false, msg: "Error during signin" });
     }
-})
+});
 
 router.get("/:userId", async (req, res) => {
     try {
-
         const { userId } = req.params;
 
         if (!userId) {
             return res.status(400).json({
+                success: false,
                 msg: "User ID is required"
             });
         }
@@ -124,20 +119,23 @@ router.get("/:userId", async (req, res) => {
 
         if (!user) {
             return res.status(404).json({
+                success: false,
                 msg: "User not found"
             });
         }
 
         return res.status(200).json({
+            success: true,
+            msg: "User details fetched successfully",
             user
         });
     } catch (e) {
         return res.status(500).json({
+            success: false,
             msg: "Error during finding user",
             error: e.message
         });
     }
 });
-
 
 export default router;

@@ -19,10 +19,9 @@ function MyFoodRequest() {
   };
  
 
-  const handleData=async()=>{
-    const res=await axiosInstance.get(`/user/${user.id}`)
-    setHistory(res.data.user.activities.filter(item => item.action=== 'requested' || item.action === 'confirmed'));
-    console.log("history",history)
+  const handleData = async () => {
+    const res = await axiosInstance.get(`/user/${user.id}`)
+    setHistory(res.data.user.activities.filter(item => item.action === 'requested' || item.action === 'confirmed'));
   }
   useEffect(()=>{
     handleData();

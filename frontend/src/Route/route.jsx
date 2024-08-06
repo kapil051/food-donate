@@ -11,7 +11,6 @@ import FoodDetails from "../pages/food/FoodDetails";
 import Root from "../layout/Root";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
-import Profile from "../pages/user/Profile";
 import MyFood from "../pages/history/MyFood";
 import MyFoodRequest from "../pages/history/MyFoodRequest";
 import NotFound from "../pages/NotFound";
@@ -48,10 +47,6 @@ const Router = () => {
         {
           path: "/register",
           element: user ? <Navigate to="/" /> : <Register />,
-        },
-        {
-          path: "/profile",
-          element: user ? <Profile /> : <Navigate to="/login" />,
         },
         {
           path: "/my-foods",
