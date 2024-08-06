@@ -89,12 +89,12 @@ function FoodDetails() {
     const fetchFoodAndUserDetails = async () => {
       try {
         const foodResponse = await axiosInstance.get(`/food/detail/${id}`);
-        const { success, data, msg } = foodResponse.data;
+        const { success, food, msg } = foodResponse.data;
         if (success) {
-          setFoodDetails(data);
-
-          const userId = data.userId;
+          setFoodDetails(food);
+          const userId = food.userId;
           const userResponse = await axiosInstance.get(`/user/${userId}`);
+          console.log(userResponse.data)
           const userResult = userResponse.data;
 
           if (userResult.success) {

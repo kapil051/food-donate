@@ -117,16 +117,25 @@ function AvailableFood() {
     const fetchFood = async () => {
         try {
             const res = await axiosInstance.get("/food/allfoods");
-            if (res.status === 200) {
-                const fetchedFoods = res.data.data;
+            console.log(res)
+            if (res.data.success) {
+                const fetchedFoods = res.data.foods;
                 setFoods(fetchedFoods);
                 setSearch(applyFiltersAndSort(fetchedFoods));
                 setAvailable(fetchedFoods.length > 0);
                 extractOptions(fetchedFoods);
             } else {
                 setAvailable(false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: res.data.msg,
+                    color: "red",
+                    confirmButtonColor: 'red',
+                });
             }
         } catch (error) {
+            console.log(error)
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
