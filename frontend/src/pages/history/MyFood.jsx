@@ -8,7 +8,6 @@ import { Helmet } from "react-helmet";
 function MyFood() {
   const { user } = useContext(AuthContext);
   const [history, setHistory] = useState([]);
-  console.log(user.id);
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -25,7 +24,6 @@ function MyFood() {
         (item) => item.action === "delivered" || item.action === "active"
       )
     );
-    console.log("history", history);
   };
   useEffect(() => {
     handleData();

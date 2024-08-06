@@ -1,4 +1,4 @@
-import React ,{useState,useEffect}from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axiosInstance from "../../utils/axiosInstance";
 function Card(props) {
@@ -15,11 +15,11 @@ function Card(props) {
      confirmed:"Confirmed",
      requested:"Requested",
   }
-  const handleFood=async()=>{
-    const foodId=await axiosInstance.get(`/food/detail/${item.foodId}`)
-    setFoodName(foodId.data.food.foodName)
-    const donarId=foodId.data.food.userId
-    const donarData=await axiosInstance.get(`/user/${donarId}`)
+  const handleFood = async () => {
+    const foodId = await axiosInstance.get(`/food/detail/${item.foodId}`)
+    setFoodName(foodId.data.data.foodName)
+    const donarId = foodId.data.data.userId
+    const donarData = await axiosInstance.get(`/user/${donarId}`)
     setDonarName(donarData.data.user.name)
     // console.log(foodId)
   }
