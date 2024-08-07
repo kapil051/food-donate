@@ -19,8 +19,8 @@ const WebsiteFeatures = () => {
                 <h3 className="my-3 text-3xl font-semibold">Fresh Produce</h3>
                 <div className="space-y-1 leading-tight">
                     <p>Apples, oranges, bananas</p>
-                    <p>Tomatoes, cucumbers, lettuce</p>
-                    <p>Herbs: basil, parsley, mint</p>
+                    <p>Tomatoes, cucumbers</p>
+                    <p>Mango,Muskmelon,Potato</p>
                 </div>
             </div>
             <div className="flex flex-col items-center p-4">
@@ -28,9 +28,9 @@ const WebsiteFeatures = () => {
            
                 <h3 className="my-3 text-3xl font-semibold">Prepared Meals</h3>
                 <div className="space-y-1 leading-tight">
-                    <p>Spaghetti with marinara sauce</p>
+                    <p>Mushroom curry </p>
                     <p>Chicken curry with rice</p>
-                    <p>Vegetable stir-fry with tofu</p>
+                    <p>Vegetable curry with fish</p>
                 </div>
             </div>
             <div className="flex flex-col items-center p-4">
@@ -39,16 +39,16 @@ const WebsiteFeatures = () => {
                 <div className="space-y-1 leading-tight">
                     <p>Parcel Fast Foods</p>
                     <p>Pasta and pasta sauce</p>
-                    <p>Rice, quinoa, and couscous</p>
+                    <p>Rice,millet,bajra</p>
                 </div>
             </div>
             <div className="flex flex-col items-center p-4">
             <PiBowlFoodLight  className='text-5xl text-[#ABD700]' ></PiBowlFoodLight >
                 <h3 className="my-3 text-3xl font-semibold">Bowl Dishes</h3>
                 <div className="space-y-1 leading-tight">
-                    <p>Ramen noodles with vegetables</p>
-                    <p>Roasted veggies, and avocado</p>
-                    <p>Poke bowls with rice, raw fish</p>
+                    <p>Noodles with vegetables</p>
+                    <p>Roasted veggies, and carrots</p>
+                    <p>Small bowls with rice, raw fish</p>
                 </div>
             </div>
             <div className="flex flex-col items-center p-4">
@@ -64,7 +64,7 @@ const WebsiteFeatures = () => {
             <MdOutlineEmojiFoodBeverage  className='text-5xl text-[#ABD700]' ></MdOutlineEmojiFoodBeverage >
                 <h3 className="my-3 text-3xl font-semibold">Beverages</h3>
                 <div className="space-y-1 leading-tight">
-                    <p>Green tea bags</p>
+                    <p>Milk,Health drinks</p>
                     <p>Bottled water</p>
                     <p>Fruit juice cartons</p>
                 </div>
