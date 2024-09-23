@@ -2,7 +2,7 @@
 
 ## Project Description
 
-Blessed Baskets is a full-stack web application built using the MERN stack (MongoDB, Express.js, React.js, Node.js). It allows administrators to manage invoices, view analytics on invoice activity, and ensure secure access to the system. The application features user authentication, CRUD operations for invoices, and the ability to generate and view invoices as PDF documents.
+Blessed Baskets is a full-stack web application built using the MERN stack (MongoDB, Express.js, React.js, Node.js). It allows users to donate food as well as request for donated food.It provides an unique verification for both food donor and the request sender so that the food is distributed properly following all safety procedures.
 
 ## Problem Statement 
 In India, 40% of the food wasted is equivalent to nearly 92,000 crore/year. This is equivalent to nearly 1% of the GDP which is depleted in the form of food wastage in India. Each person in India wastes 55 kg of food per year as per UN Environment Programme's report.On the other hand according to the UN's Food and Agricultural Organisation (FAO) 'The State of Food Security and Nutrition in the World, 2022 Report', 224.3 million people, or 16 per cent of India's population, are undernourished.
