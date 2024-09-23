@@ -1,4 +1,4 @@
-# Invoice Management System
+# Blessed Baskets
 
 ## Project Description
 
@@ -28,6 +28,36 @@ The challenge is to bridge the gap between excessive food wastage and the millio
 - **Deployment:**
   - Netlify (Frontend)
   - Vercel (Backend)
+
+###  Data Flow Diagram
+
+![dd](https://github.com/user-attachments/assets/f943021c-a551-4714-b0bc-1c943298857a)
+
+### Screenshots 
+
+- **Donate Food Page:**
+
+<img width="947" alt="donateForm" src="https://github.com/user-attachments/assets/6a28194b-501c-4cbf-a5c8-63268eaac379">
+
+- **Available Foods Page:**
+
+<img width="942" alt="availableFood" src="https://github.com/user-attachments/assets/ff9ca556-f854-4be5-987d-a8f41c49ac66">
+
+- **MyFood Page:** Donated food history
+
+<img width="950" alt="fooddonated_history" src="https://github.com/user-attachments/assets/5ec018ff-70ec-496b-a3d4-578722b8ccae">
+
+- **MyFoodRequest Page:** Requested food history
+
+<img width="959" alt="foodrequest_history" src="https://github.com/user-attachments/assets/5b6fa840-9c95-4b24-b549-75855ae29d32">
+
+- **Food requested email to donor:**
+
+<img width="949" alt="foodrequest_email" src="https://github.com/user-attachments/assets/977daca5-3345-4a99-82ee-65a1a597c7f9">
+
+- **Requested food confirmation email to request sender:**
+
+<img width="957" alt="requestConfirm_email" src="https://github.com/user-attachments/assets/7f9422bc-f644-4655-8c8a-446dcadf4053">
 
 ## Setup Instructions for Running the Project Locally
 
@@ -93,7 +123,4 @@ The challenge is to bridge the gap between excessive food wastage and the millio
 - **Frontend:** The client will run on `http://localhost:3000`.
 
 
-###  Data Flow Diagram
-
-![dd](https://github.com/user-attachments/assets/f943021c-a551-4714-b0bc-1c943298857a)
 
