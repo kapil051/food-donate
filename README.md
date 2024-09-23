@@ -27,7 +27,7 @@ With Blessed Baskets, people can easily donate or request food. We have a simple
 
 - **Deployment:**
   - Netlify (Frontend)
-  - Vercel (Backend)
+  - Render (Backend)
 
 ###  Data Flow Diagram
 
